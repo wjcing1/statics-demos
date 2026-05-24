@@ -1,0 +1,10 @@
+# Whitelist mode: ignore everything by default, then explicitly include public files.
+# Adding a new file? It stays private unless added below with `!`.
+
+*
+
+# Public files
+!.gitignore
+!README.md
+!index.html
+!demos.html

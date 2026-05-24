@@ -1,0 +1,1012 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Statics 097430 — Practical Sheet 2 Demos</title>
+<style>
+* { box-sizing: border-box; }
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", sans-serif;
+  margin: 0; padding: 24px;
+  background: #fafafa; color: #222;
+  max-width: 1100px; margin-left: auto; margin-right: auto;
+  line-height: 1.5;
+}
+h1 { font-size: 24px; margin: 0 0 8px; }
+h2 { font-size: 19px; margin: 0 0 12px; color: #1a1a1a; }
+.subtitle { color: #666; font-size: 14px; margin-bottom: 24px; }
+nav { margin-bottom: 24px; }
+nav a {
+  display: inline-block; padding: 6px 14px;
+  background: #fff; border: 1px solid #ddd; color: #333;
+  text-decoration: none; margin-right: 8px;
+  border-radius: 4px; font-size: 14px;
+}
+nav a:hover { background: #f0f0f0; }
+section {
+  background: white; border: 1px solid #e3e3e3;
+  border-radius: 8px; padding: 24px;
+  margin-bottom: 28px;
+}
+.demo-row {
+  display: flex; gap: 24px;
+  align-items: flex-start; flex-wrap: wrap;
+}
+.demo-svg-wrapper { flex: 1.2; min-width: 400px; }
+.demo-controls { flex: 1; min-width: 280px; }
+svg {
+  width: 100%; height: auto;
+  background: #fdfdfd;
+  border: 1px solid #eee; border-radius: 4px;
+  display: block; touch-action: none;
+}
+button {
+  padding: 7px 14px; border: 1px solid #ccc;
+  background: white; border-radius: 4px;
+  cursor: pointer; font-size: 13px;
+  margin-right: 6px; margin-bottom: 8px;
+}
+button:hover { background: #f5f5f5; }
+button.active {
+  background: #2a6df4; color: white; border-color: #2a6df4;
+}
+.formula {
+  font-family: "SF Mono", Consolas, Menlo, monospace;
+  background: #f5f5f5; padding: 12px;
+  border-radius: 4px; margin: 12px 0;
+  font-size: 13px; line-height: 1.7;
+}
+.answer {
+  background: #e8f5e9; color: #1b5e20;
+  padding: 12px 14px; border-radius: 4px;
+  font-weight: 500; margin: 12px 0;
+  font-size: 14px; line-height: 1.7;
+}
+.warning {
+  background: #fff8e1; border-left: 4px solid #ffa000;
+  padding: 12px 14px; margin: 16px 0;
+  font-size: 14px;
+}
+.note {
+  font-size: 13px; color: #666;
+  background: #f9f9f9; padding: 10px 14px;
+  border-radius: 4px; border-left: 3px solid #bbb;
+  margin: 12px 0;
+}
+input[type="range"] { width: 100%; margin: 6px 0; }
+.slider-row { margin-bottom: 14px; }
+.slider-row label {
+  display: block; font-weight: 500;
+  margin-bottom: 2px; font-size: 13px;
+}
+.value-display {
+  font-family: "SF Mono", Consolas, monospace;
+  color: #2a6df4; font-weight: 600;
+}
+.legend {
+  display: flex; gap: 16px; flex-wrap: wrap;
+  font-size: 12px; margin-top: 8px; color: #555;
+}
+.legend-item { display: flex; align-items: center; gap: 6px; }
+.legend-swatch {
+  width: 16px; height: 3px; display: inline-block; border-radius: 1px;
+}
+footer {
+  text-align: center; color: #999;
+  font-size: 12px; margin-top: 20px;
+}
+strong.kw { color: #c62828; }
+</style>
+</head>
+<body>
+
+<h1>Statics 097430 — Practical Sheet 2 Demos</h1>
+<p class="subtitle">Two interactive visualizations to build intuition before solving.</p>
+
+<nav>
+  <a href="#foundations">▸ ① Foundations</a>
+  <a href="#demo1">▸ ② Prob 1.3 — Pure Binary</a>
+  <a href="#demo2">▸ ③ Prob 2.3 — Force Projection</a>
+</nav>
+
+<!-- ============ FOUNDATIONS ============ -->
+<section id="foundations">
+<h2>① Foundation Concepts — 用到的基础概念</h2>
+<p style="font-size:14px;color:#555;">
+Three ideas unlock both problems: <strong>moment of a force</strong>, <strong>force decomposition</strong>, and the bridge that connects them — <strong>Varignon's principle</strong>.
+</p>
+
+<!-- Concept 1: Moment -->
+<h3 style="margin-top:24px;font-size:16px;color:#1a1a1a;">1️⃣ Moment of a force about a point</h3>
+<p style="font-size:14px;margin-bottom:10px;">
+<strong>M = r × F = F · d</strong><br>
+where <strong>d</strong> = perpendicular distance from the reference point to the force's line of action.<br>
+Sign convention: counter-clockwise (CCW) is positive.
+</p>
+<div class="demo-row">
+  <div class="demo-svg-wrapper">
+    <svg id="svg-moment" viewBox="0 0 460 300"></svg>
+    <div class="legend">
+      <div class="legend-item"><span class="legend-swatch" style="background:#888"></span> r (position)</div>
+      <div class="legend-item"><span class="legend-swatch" style="background:#558b2f"></span> d (perpendicular dist)</div>
+      <div class="legend-item"><span class="legend-swatch" style="background:#1976d2"></span> F (force)</div>
+    </div>
+  </div>
+  <div class="demo-controls">
+    <p style="font-size:13px;margin-top:0;">👉 Drag the <strong style="color:#43a047">green dot P</strong> anywhere.</p>
+    <div class="formula">
+      r = (<span id="m-rx">2.50</span>, <span id="m-ry">1.50</span>) m, |r| = varies<br>
+      F = (0, 3) kN — vertical, upward<br>
+      d (perpendicular) = <strong><span id="m-d">2.50</span> m</strong><br>
+      <strong>M = F · d = <span id="m-val">+7.50</span> kN·m</strong>
+    </div>
+    <div class="note">
+      <strong>Key insight #1:</strong> drag P <em>vertically</em> (same x). |r| changes, but <strong>d and M don't</strong>. Moment is invariant when you slide a force along its own line of action.<br><br>
+      <strong>Key insight #2:</strong> drag P <em>horizontally</em>. d changes proportionally. M = F · d.
+    </div>
+  </div>
+</div>
+
+<!-- Concept 2: Varignon -->
+<h3 style="margin-top:32px;font-size:16px;color:#1a1a1a;">2️⃣ Varignon's Principle</h3>
+<p style="font-size:14px;margin-bottom:10px;">
+The moment of a force = <em>sum</em> of the moments of its components.<br>
+<strong>M<sub>F</sub> = M<sub>Fx</sub> + M<sub>Fy</sub></strong> for any orthogonal decomposition.<br>
+This is the workhorse: instead of fighting a tilted force directly, decompose it and sum.
+</p>
+<div class="demo-row">
+  <div class="demo-svg-wrapper">
+    <svg id="svg-varignon" viewBox="0 0 460 300"></svg>
+    <div class="legend">
+      <div class="legend-item"><span class="legend-swatch" style="background:#8e24aa"></span> F (resultant)</div>
+      <div class="legend-item"><span class="legend-swatch" style="background:#c62828"></span> Fx</div>
+      <div class="legend-item"><span class="legend-swatch" style="background:#1976d2"></span> Fy</div>
+    </div>
+  </div>
+  <div class="demo-controls">
+    <p style="font-size:13px;margin-top:0;">👉 Drag P, slide the angle. Watch M<sub>F</sub> = M<sub>Fx</sub> + M<sub>Fy</sub> always hold.</p>
+    <div class="slider-row">
+      <label>Force angle θ = <span id="v-angle-val" class="value-display">30</span>°</label>
+      <input type="range" id="v-angle-slider" min="0" max="180" step="5" value="30">
+    </div>
+    <div class="formula">
+      r = (<span id="v-rx">3.0</span>, <span id="v-ry">2.0</span>) m, |F| = 5 kN<br>
+      F<sub>x</sub> = <span id="v-fx">4.33</span> kN · F<sub>y</sub> = <span id="v-fy">2.50</span> kN<br>
+      M<sub>Fx</sub> = −r<sub>y</sub>·F<sub>x</sub> = <span id="v-mfx">-8.66</span><br>
+      M<sub>Fy</sub> = r<sub>x</sub>·F<sub>y</sub> = <span id="v-mfy">+7.50</span><br>
+      <strong>Sum = <span id="v-sum">-1.16</span> kN·m</strong>
+    </div>
+    <div class="answer">
+      M<sub>F</sub> (computed directly) = <strong><span id="v-mf">-1.16</span> kN·m</strong>
+      <div style="font-size:12px;margin-top:4px;">✓ Always equals Sum — that's Varignon.</div>
+    </div>
+  </div>
+</div>
+
+<!-- Bridge to problems -->
+<div class="note" style="margin-top:24px;background:#f0f7ff;border-left-color:#1976d2;">
+<strong>How these unlock the problems:</strong>
+<ul style="margin:6px 0 0 0;padding-left:22px;font-size:13px;line-height:1.7;">
+  <li><strong>Prob 1.3:</strong> 12 forces → Varignon says M<sub>total</sub> = Σ M<sub>each</sub>. Because ∑F = 0 (pure binary), the result is independent of reference point.</li>
+  <li><strong>Prob 2.3:</strong> Cable force T on the post → use Varignon backwards: decompose T into <strong>F<sub>t</sub></strong> (along post) + <strong>F<sub>n</sub></strong> (perpendicular). Solving the two components is easier than fighting T directly.</li>
+  <li><strong>Trig you'll need:</strong> Law of cosines (AB² = OA² + OB² − 2·OA·OB·cos∠O) and Law of sines (sin∠A/OB = sin∠O/AB) to handle non-right triangles like in Prob 2.3.</li>
+</ul>
+</div>
+</section>
+
+<!-- ============ DEMO 1 ============ -->
+<section id="demo1">
+<h2>Prob 1.3 — Pure Binary: moment is the same about any point</h2>
+
+<p style="font-size:14px;">
+3 force pairs. Each pair = equal-opposite forces, so <strong>∑F = 0</strong>.
+A system with ∑F = 0 is called a <strong class="kw">pure couple</strong> (or pure binary).
+<br><br>
+👉 <strong>Click or drag anywhere</strong> in the diagram to set the reference point.
+Watch the moment — <strong>it never changes</strong>. That's the defining property of a pure couple.
+</p>
+
+<div class="demo-row">
+  <div class="demo-svg-wrapper">
+    <svg id="svg13" viewBox="0 0 520 420"></svg>
+    <div class="legend">
+      <div class="legend-item"><span class="legend-swatch" style="background:#e53935"></span> Pair 1 — 10 kN (vertical, arm 4 m)</div>
+      <div class="legend-item"><span class="legend-swatch" style="background:#1e88e5"></span> Pair 2 — 6 kN (horizontal, arm 4 m)</div>
+      <div class="legend-item"><span class="legend-swatch" style="background:#43a047"></span> Pair 3 — 4 kN (vertical, arm 2 m)</div>
+    </div>
+  </div>
+
+  <div class="demo-controls">
+    <button id="toggle-pairs" class="active">Highlight pair connections</button>
+    <button id="toggle-eq">Show equivalent binary (d = 2 m)</button>
+
+    <div class="formula">
+      ∑F<sub>x</sub> = <span id="sum-fx">0</span> kN<br>
+      ∑F<sub>y</sub> = <span id="sum-fy">0</span> kN<br>
+      ⇒ <strong>∑F = 0 ✓ pure binary</strong>
+    </div>
+
+    <div class="answer">
+      Moment about red reference point:<br>
+      <span style="font-size:18px;">M = <span id="m-display">+72.0</span> kN·m</span>
+      <div style="margin-top:6px; font-size:12px; color:#555;">(<span id="m-direction">CCW ↺</span>)</div>
+    </div>
+
+    <div class="note">
+      <strong>Why constant?</strong> Shifting the reference by vector <strong>r</strong> changes M by <strong>r × ∑F</strong>. Since ∑F = 0, the shift is 0. M doesn't depend on the point.
+      <br><br>
+      <strong>For part (c):</strong> Toggle "equivalent binary" — same M, distance d = 2 m, so F = M/d.
+    </div>
+
+    <div class="note" style="border-left-color: #1976d2; background:#f0f7ff;">
+      <strong>Note vs the actual Prob 1.3:</strong> the textbook problem has 6 binary pairs (12 forces) giving M = 252 kN·m. This demo is a simplified 3-pair version that follows the exact same logic.
+    </div>
+  </div>
+</div>
+</section>
+
+<!-- ============ DEMO 2 ============ -->
+<section id="demo2">
+<h2>Prob 2.3 — Force projection on local axes (t, n)</h2>
+
+<div class="warning">
+⚠️ <strong>Watch the angle!</strong> ∠AOB = <strong style="color:#c62828">120°</strong>, not 60° — because B is on the <em>opposite side</em> of O.
+</div>
+
+<div class="demo-row">
+  <div class="demo-svg-wrapper">
+    <svg id="svg23" viewBox="0 0 520 420"></svg>
+    <div class="legend">
+      <div class="legend-item"><span class="legend-swatch" style="background:#e53935"></span> T (cable tension)</div>
+      <div class="legend-item"><span class="legend-swatch" style="background:#1976d2"></span> F<sub>t</sub> (along post — compression)</div>
+      <div class="legend-item"><span class="legend-swatch" style="background:#43a047"></span> F<sub>n</sub> (perpendicular)</div>
+      <div class="legend-item"><span class="legend-swatch" style="background:#ff9800"></span> ∠AOB</div>
+    </div>
+  </div>
+
+  <div class="demo-controls">
+    <div class="slider-row">
+      <label>Cable tension T = <span id="T-val" class="value-display">750</span> N</label>
+      <input type="range" id="T-slider" min="100" max="1500" step="50" value="750">
+    </div>
+    <div class="slider-row">
+      <label>Post angle from ground = <span id="angle-val" class="value-display">60</span>°</label>
+      <input type="range" id="angle-slider" min="30" max="85" step="1" value="60">
+    </div>
+    <div class="slider-row">
+      <label>Distance OB = <span id="OB-val" class="value-display">1.20</span> m</label>
+      <input type="range" id="OB-slider" min="0.5" max="2.5" step="0.05" value="1.2">
+    </div>
+
+    <div class="formula">
+      <strong>Step 1</strong> — Law of cosines:<br>
+      AB² = OA² + OB² − 2·OA·OB·cos(∠AOB)<br>
+      &nbsp;&nbsp;&nbsp;&nbsp;= <span id="AB-formula">5.490</span><br>
+      AB = <strong><span id="AB-display">2.343</span></strong> m
+    </div>
+
+    <div class="formula">
+      <strong>Step 2</strong> — Law of sines:<br>
+      sin α = OB · sin(∠AOB) / AB<br>
+      α = <strong><span id="alpha-display">26.33</span>°</strong>
+    </div>
+
+    <div class="answer">
+      <strong>F<sub>t</sub></strong> = T · cos α = <strong><span id="Ft-display">672.24</span> N</strong> (compression)<br>
+      <strong>F<sub>n</sub></strong> = T · sin α = <strong><span id="Fn-display">332.53</span> N</strong><br>
+      <div style="margin-top:6px; font-size:12px;">
+        Check: √(F<sub>t</sub>² + F<sub>n</sub>²) = <span id="check-display">750.0</span> ≈ T ✓
+      </div>
+    </div>
+
+    <div class="note">
+      <strong>Try this:</strong> slide the post angle to 90° — α stays the same? slide OB to 0 — what happens to AB and α? These help build intuition for the geometry.
+    </div>
+  </div>
+</div>
+</section>
+
+<footer>
+  Statics 097430 — Practical Sheet 2 · Open this file in any browser, no install needed.
+</footer>
+
+<script>
+// ============ DEMO 1 ============
+(function(){
+  const svg = document.getElementById('svg13');
+  const ns = 'http://www.w3.org/2000/svg';
+
+  const W = 520, H = 420;
+  const padL = 70, padR = 80, padT = 50, padB = 60;
+  const PHYS_W = 4, PHYS_H = 4;
+  const sx = (W - padL - padR) / PHYS_W;
+  const sy = (H - padT - padB) / PHYS_H;
+
+  const px = xm => padL + xm * sx;
+  const py = ym => H - padB - ym * sy;
+  const unpx = pxv => (pxv - padL) / sx;
+  const unpy = pyv => (H - padB - pyv) / sy;
+
+  // 3 binary pairs (all give CCW moments → total +72 kN·m)
+  const forces = [
+    {x:0, y:2, fx:0,  fy:-10, pair:0, color:'#e53935', label:'10 kN'},
+    {x:4, y:2, fx:0,  fy: 10, pair:0, color:'#e53935', label:'10 kN'},
+    {x:2, y:0, fx:6,  fy:0,   pair:1, color:'#1e88e5', label:'6 kN'},
+    {x:2, y:4, fx:-6, fy:0,   pair:1, color:'#1e88e5', label:'6 kN'},
+    {x:1, y:3, fx:0,  fy:-4,  pair:2, color:'#43a047', label:'4 kN'},
+    {x:3, y:3, fx:0,  fy: 4,  pair:2, color:'#43a047', label:'4 kN'},
+  ];
+
+  let refPt = {x: 2, y: 2};
+  let showPairs = true;
+  let showEq = false;
+
+  function el(tag, attrs) {
+    const n = document.createElementNS(ns, tag);
+    for (const k in attrs) n.setAttribute(k, attrs[k]);
+    return n;
+  }
+
+  function drawGrid() {
+    const g = el('g', {opacity:'0.35'});
+    for (let i = 0; i <= PHYS_W; i++) {
+      g.appendChild(el('line', {
+        x1:px(i), y1:py(0), x2:px(i), y2:py(PHYS_H),
+        stroke:'#ccc', 'stroke-dasharray':'2,3'
+      }));
+    }
+    for (let j = 0; j <= PHYS_H; j++) {
+      g.appendChild(el('line', {
+        x1:px(0), y1:py(j), x2:px(PHYS_W), y2:py(j),
+        stroke:'#ccc', 'stroke-dasharray':'2,3'
+      }));
+    }
+    for (let i = 0; i <= PHYS_W; i++) {
+      const t = el('text', {
+        x:px(i), y:H-padB+18, 'text-anchor':'middle',
+        'font-size':'11', fill:'#999'
+      });
+      t.textContent = i + ' m';
+      g.appendChild(t);
+    }
+    for (let j = 0; j <= PHYS_H; j++) {
+      const t = el('text', {
+        x:padL-10, y:py(j)+4, 'text-anchor':'end',
+        'font-size':'11', fill:'#999'
+      });
+      t.textContent = j + ' m';
+      g.appendChild(t);
+    }
+    return g;
+  }
+
+  function drawArrow(xm, ym, fx, fy, color, label) {
+    const scale = 14; // px per kN
+    const mag = Math.sqrt(fx*fx + fy*fy);
+    if (mag < 0.01) return el('g', {});
+    const ux = fx / mag, uy = fy / mag;
+    const length = mag * scale;
+    const x1 = px(xm), y1 = py(ym);
+    // In SVG y is inverted: physical +y is down (-y in svg)
+    const x2 = x1 + ux * length;
+    const y2 = y1 - uy * length;
+
+    const g = el('g', {});
+    g.appendChild(el('line', {
+      x1, y1, x2, y2, stroke:color, 'stroke-width':'2.5', 'stroke-linecap':'round'
+    }));
+
+    // arrowhead
+    const dxs = x2 - x1, dys = y2 - y1;
+    const ls = Math.sqrt(dxs*dxs + dys*dys);
+    const dxn = dxs/ls, dyn = dys/ls;
+    const headLen = 10, headW = 6;
+    const bx = x2 - dxn * headLen;
+    const by = y2 - dyn * headLen;
+    const px_ = -dyn * headW, py_ = dxn * headW;
+    const head = el('polygon', {
+      points: `${x2},${y2} ${bx+px_},${by+py_} ${bx-px_},${by-py_}`,
+      fill: color
+    });
+    g.appendChild(head);
+
+    // label
+    const mxL = (x1 + x2) / 2;
+    const myL = (y1 + y2) / 2;
+    const lx = mxL + (-dyn * 14);
+    const ly = myL + (dxn * 14);
+    const t = el('text', {
+      x:lx, y:ly+4, 'text-anchor':'middle',
+      'font-size':'12', fill:color, 'font-weight':'600'
+    });
+    t.textContent = label;
+    g.appendChild(t);
+
+    // application dot
+    g.appendChild(el('circle', {
+      cx:x1, cy:y1, r:'3', fill:color
+    }));
+
+    return g;
+  }
+
+  function computeMoment(fs) {
+    let M = 0, sumFx = 0, sumFy = 0;
+    fs.forEach(f => {
+      const rx = f.x - refPt.x;
+      const ry = f.y - refPt.y;
+      M += rx * f.fy - ry * f.fx;
+      sumFx += f.fx; sumFy += f.fy;
+    });
+    return {M, sumFx, sumFy};
+  }
+
+  function render() {
+    svg.innerHTML = '';
+    svg.appendChild(drawGrid());
+
+    let active = forces;
+    if (showEq) {
+      // Equivalent binary: M = 72 kN·m, d = 2 m → F = 36 kN
+      active = [
+        {x:1, y:2, fx:0, fy:-36, color:'#8e24aa', label:'36 kN'},
+        {x:3, y:2, fx:0, fy: 36, color:'#8e24aa', label:'36 kN'},
+      ];
+      // distance annotation
+      svg.appendChild(el('line', {
+        x1:px(1), y1:py(2), x2:px(3), y2:py(2),
+        stroke:'#8e24aa', 'stroke-dasharray':'4,3', opacity:'0.5'
+      }));
+      const t = el('text', {
+        x:px(2), y:py(2)-10, 'text-anchor':'middle',
+        'font-size':'12', fill:'#8e24aa', 'font-weight':'600'
+      });
+      t.textContent = 'd = 2 m';
+      svg.appendChild(t);
+    } else if (showPairs) {
+      // Pair connecting dashed lines
+      for (let p = 0; p < 3; p++) {
+        const pair = forces.filter(f => f.pair === p);
+        svg.appendChild(el('line', {
+          x1:px(pair[0].x), y1:py(pair[0].y),
+          x2:px(pair[1].x), y2:py(pair[1].y),
+          stroke:pair[0].color, 'stroke-width':'1.5',
+          'stroke-dasharray':'5,4', opacity:'0.45'
+        }));
+      }
+    }
+
+    active.forEach(f => svg.appendChild(drawArrow(f.x, f.y, f.fx, f.fy, f.color, f.label)));
+
+    // Reference point (red, on top)
+    const refG = el('g', {style:'cursor: grab;'});
+    refG.appendChild(el('circle', {
+      cx:px(refPt.x), cy:py(refPt.y), r:'10',
+      fill:'rgba(255,68,68,0.2)', stroke:'#ff4444', 'stroke-width':'2'
+    }));
+    refG.appendChild(el('circle', {
+      cx:px(refPt.x), cy:py(refPt.y), r:'4', fill:'#ff4444'
+    }));
+    const refT = el('text', {
+      x:px(refPt.x)+14, y:py(refPt.y)-10,
+      'font-size':'12', 'font-weight':'600', fill:'#c62828'
+    });
+    refT.textContent = `ref (${refPt.x.toFixed(1)}, ${refPt.y.toFixed(1)})`;
+    refG.appendChild(refT);
+    svg.appendChild(refG);
+
+    // Compute & display
+    const {M, sumFx, sumFy} = computeMoment(active);
+    document.getElementById('sum-fx').textContent = Math.abs(sumFx) < 0.01 ? '0' : sumFx.toFixed(1);
+    document.getElementById('sum-fy').textContent = Math.abs(sumFy) < 0.01 ? '0' : sumFy.toFixed(1);
+    document.getElementById('m-display').textContent = (M >= 0 ? '+' : '') + M.toFixed(1);
+    document.getElementById('m-direction').textContent = M >= 0 ? 'CCW ↺' : 'CW ↻';
+  }
+
+  // Interaction
+  let dragging = false;
+  function getSVGCoords(clientX, clientY) {
+    const pt = svg.createSVGPoint();
+    pt.x = clientX; pt.y = clientY;
+    return pt.matrixTransform(svg.getScreenCTM().inverse());
+  }
+  function setRef(clientX, clientY) {
+    const c = getSVGCoords(clientX, clientY);
+    refPt.x = Math.max(0, Math.min(PHYS_W, unpx(c.x)));
+    refPt.y = Math.max(0, Math.min(PHYS_H, unpy(c.y)));
+    render();
+  }
+
+  svg.addEventListener('mousedown', e => { dragging = true; setRef(e.clientX, e.clientY); });
+  svg.addEventListener('mousemove', e => { if (dragging) setRef(e.clientX, e.clientY); });
+  window.addEventListener('mouseup', () => dragging = false);
+
+  svg.addEventListener('touchstart', e => {
+    e.preventDefault(); dragging = true;
+    const t = e.touches[0]; setRef(t.clientX, t.clientY);
+  }, {passive: false});
+  svg.addEventListener('touchmove', e => {
+    if (!dragging) return; e.preventDefault();
+    const t = e.touches[0]; setRef(t.clientX, t.clientY);
+  }, {passive: false});
+  svg.addEventListener('touchend', () => dragging = false);
+
+  document.getElementById('toggle-pairs').addEventListener('click', e => {
+    showPairs = !showPairs;
+    e.target.classList.toggle('active', showPairs);
+    render();
+  });
+  document.getElementById('toggle-eq').addEventListener('click', e => {
+    showEq = !showEq;
+    e.target.classList.toggle('active', showEq);
+    render();
+  });
+
+  render();
+})();
+
+// ============ DEMO 2 ============
+(function(){
+  const svg = document.getElementById('svg23');
+  const ns = 'http://www.w3.org/2000/svg';
+
+  const W = 520, H = 420;
+  const groundY = 320;
+  const O_px = 310, O_py = groundY;
+  const SCALE = 90; // pixels per meter
+
+  let T = 750;
+  let postAngle = 60;
+  let OB_dist = 1.2;
+  const OA_len = 1.5;
+
+  function el(tag, attrs) {
+    const n = document.createElementNS(ns, tag);
+    for (const k in attrs) n.setAttribute(k, attrs[k]);
+    return n;
+  }
+
+  function compute() {
+    const postRad = postAngle * Math.PI / 180;
+    const A_x = O_px + OA_len * SCALE * Math.cos(postRad);
+    const A_y = O_py - OA_len * SCALE * Math.sin(postRad);
+    const B_x = O_px - OB_dist * SCALE;
+    const B_y = O_py;
+
+    const angleAOB = 180 - postAngle;
+    const AOBrad = angleAOB * Math.PI / 180;
+    const AB2 = OA_len*OA_len + OB_dist*OB_dist - 2*OA_len*OB_dist*Math.cos(AOBrad);
+    const AB = Math.sqrt(AB2);
+
+    const sinAlpha = OB_dist * Math.sin(AOBrad) / AB;
+    const alpha = Math.asin(Math.min(1, Math.max(-1, sinAlpha))) * 180 / Math.PI;
+    const alphaRad = alpha * Math.PI / 180;
+
+    const Ft = T * Math.cos(alphaRad);
+    const Fn = T * Math.sin(alphaRad);
+
+    return {A_x, A_y, B_x, B_y, AB, AB2, alpha, Ft, Fn, angleAOB, postRad};
+  }
+
+  function drawArrow(x1, y1, x2, y2, color, label, labelSide) {
+    const g = el('g', {});
+    const dx = x2-x1, dy = y2-y1;
+    const len = Math.sqrt(dx*dx+dy*dy);
+    if (len < 1) return g;
+    const ux = dx/len, uy = dy/len;
+
+    g.appendChild(el('line', {
+      x1, y1, x2, y2, stroke:color, 'stroke-width':'2.5', 'stroke-linecap':'round'
+    }));
+    const headLen = 10, headW = 6;
+    const bx = x2 - ux * headLen, by = y2 - uy * headLen;
+    const npx = -uy * headW, npy = ux * headW;
+    g.appendChild(el('polygon', {
+      points: `${x2},${y2} ${bx+npx},${by+npy} ${bx-npx},${by-npy}`,
+      fill: color
+    }));
+
+    if (label) {
+      const mx = (x1+x2)/2, my = (y1+y2)/2;
+      const side = labelSide || 1;
+      const t = el('text', {
+        x: mx + (-uy * 16) * side,
+        y: my + (ux * 16) * side + 4,
+        'text-anchor':'middle', 'font-size':'12',
+        fill: color, 'font-weight':'600'
+      });
+      t.textContent = label;
+      g.appendChild(t);
+    }
+    return g;
+  }
+
+  function drawArc(cx, cy, r, startDeg, endDeg, color, label) {
+    const g = el('g', {});
+    const sRad = startDeg * Math.PI/180;
+    const eRad = endDeg * Math.PI/180;
+    const sx = cx + r * Math.cos(sRad), sy = cy - r * Math.sin(sRad);
+    const ex = cx + r * Math.cos(eRad), ey = cy - r * Math.sin(eRad);
+    const largeArc = Math.abs(endDeg - startDeg) > 180 ? 1 : 0;
+    // In SVG y-down: math CCW (endDeg > startDeg, taking short way) appears as visual CW → sweep=1
+    const sweep = endDeg > startDeg ? 1 : 0;
+    g.appendChild(el('path', {
+      d:`M ${sx} ${sy} A ${r} ${r} 0 ${largeArc} ${sweep} ${ex} ${ey}`,
+      stroke: color, 'stroke-width':'2.5', fill:'none'
+    }));
+    const midDeg = (startDeg + endDeg) / 2;
+    const midRad = midDeg * Math.PI/180;
+    const labelR = r + 18;
+    const t = el('text', {
+      x: cx + labelR * Math.cos(midRad),
+      y: cy - labelR * Math.sin(midRad) + 4,
+      'text-anchor':'middle', 'font-size':'13',
+      fill: color, 'font-weight':'700'
+    });
+    t.textContent = label;
+    g.appendChild(t);
+    return g;
+  }
+
+  function render() {
+    svg.innerHTML = '';
+    const c = compute();
+
+    // Ground line + hatching
+    svg.appendChild(el('line', {
+      x1:20, y1:groundY, x2:W-20, y2:groundY, stroke:'#555', 'stroke-width':'2'
+    }));
+    for (let x = 30; x < W-20; x += 14) {
+      svg.appendChild(el('line', {
+        x1:x, y1:groundY, x2:x-8, y2:groundY+10,
+        stroke:'#888', 'stroke-width':'1'
+      }));
+    }
+
+    // Post OA (thick brown)
+    svg.appendChild(el('line', {
+      x1:O_px, y1:O_py, x2:c.A_x, y2:c.A_y,
+      stroke:'#6d4c41', 'stroke-width':'7', 'stroke-linecap':'round'
+    }));
+
+    // Cable AB (gray dashed)
+    svg.appendChild(el('line', {
+      x1:c.A_x, y1:c.A_y, x2:c.B_x, y2:c.B_y,
+      stroke:'#888', 'stroke-width':'1.5', 'stroke-dasharray':'5,4'
+    }));
+
+    // Angle arc at O (120° between OA and OB)
+    svg.appendChild(drawArc(O_px, O_py, 40, postAngle, 180, '#ff9800',
+      `∠AOB = ${c.angleAOB.toFixed(0)}°`));
+
+    // Compute T's direction (A → B)
+    const dx = c.B_x - c.A_x, dy = c.B_y - c.A_y;
+    const dist = Math.sqrt(dx*dx + dy*dy);
+    const Tux = dx/dist, Tuy = dy/dist;
+
+    // T arrow (visualized: shorter than actual AB so it doesn't overlap)
+    const Tvis = Math.min(0.55 * dist, 130);
+    const T_endX = c.A_x + Tux * Tvis;
+    const T_endY = c.A_y + Tuy * Tvis;
+    svg.appendChild(drawArrow(c.A_x, c.A_y, T_endX, T_endY, '#e53935', `T=${T}N`, 1));
+
+    // Local axes at A
+    // t-axis: from O to A direction
+    const tx = Math.cos(c.postRad), ty = -Math.sin(c.postRad); // SVG (+x right, +y down)
+    // n-axis: perpendicular to t, choose direction toward cable side
+    // = rotate t by -90° (CW in SVG, which is CCW in math)
+    let nx = ty, ny = -tx;
+    // Ensure n points toward where T's perpendicular component goes
+    const TdotN = Tux * nx + Tuy * ny;
+    if (TdotN < 0) { nx = -nx; ny = -ny; }
+
+    // Decomposed Ft (along -t, toward O = compression)
+    const FtVisScale = 0.13;
+    const Ft_endX = c.A_x - tx * c.Ft * FtVisScale;
+    const Ft_endY = c.A_y - ty * c.Ft * FtVisScale;
+    svg.appendChild(drawArrow(c.A_x, c.A_y, Ft_endX, Ft_endY,
+      '#1976d2', `Ft=${c.Ft.toFixed(0)}N`, -1));
+
+    // Decomposed Fn (along +n)
+    const Fn_endX = c.A_x + nx * c.Fn * FtVisScale;
+    const Fn_endY = c.A_y + ny * c.Fn * FtVisScale;
+    svg.appendChild(drawArrow(c.A_x, c.A_y, Fn_endX, Fn_endY,
+      '#43a047', `Fn=${c.Fn.toFixed(0)}N`, 1));
+
+    // Show small t-axis indicator at A (dotted)
+    const tInd_x = c.A_x + tx * 32, tInd_y = c.A_y + ty * 32;
+    svg.appendChild(el('line', {
+      x1:c.A_x, y1:c.A_y, x2:tInd_x, y2:tInd_y,
+      stroke:'#666', 'stroke-width':'1', 'stroke-dasharray':'2,2'
+    }));
+    const tLbl = el('text', {
+      x:tInd_x+6, y:tInd_y+4, 'font-size':'11', fill:'#666', 'font-style':'italic'
+    });
+    tLbl.textContent = 't';
+    svg.appendChild(tLbl);
+
+    // Labels at O, A, B
+    const mkLabel = (x, y, text, dx_, dy_, sz) => {
+      const t = el('text', {
+        x:x+dx_, y:y+dy_, 'font-size':sz||'15', 'font-weight':'700', fill:'#222'
+      });
+      t.textContent = text;
+      return t;
+    };
+    svg.appendChild(mkLabel(O_px, O_py, 'O', 8, 20));
+    svg.appendChild(mkLabel(c.A_x, c.A_y, 'A', 10, -8));
+    svg.appendChild(mkLabel(c.B_x, c.B_y, 'B', -18, 20));
+
+    const mkDot = (x, y) => el('circle', {cx:x, cy:y, r:'3.5', fill:'#222'});
+    svg.appendChild(mkDot(O_px, O_py));
+    svg.appendChild(mkDot(c.A_x, c.A_y));
+    svg.appendChild(mkDot(c.B_x, c.B_y));
+
+    // OB distance label
+    const obT = el('text', {
+      x:(O_px + c.B_x)/2, y:O_py+38, 'text-anchor':'middle',
+      'font-size':'12', fill:'#666'
+    });
+    obT.textContent = `OB = ${OB_dist.toFixed(2)} m`;
+    svg.appendChild(obT);
+
+    // OA length label (rotated along post)
+    const midOA_x = (O_px + c.A_x)/2 + 14;
+    const midOA_y = (O_py + c.A_y)/2;
+    const oaT = el('text', {
+      x:midOA_x, y:midOA_y, 'font-size':'12', fill:'#666'
+    });
+    oaT.textContent = `OA = 1.5 m`;
+    svg.appendChild(oaT);
+
+    // Update readouts
+    document.getElementById('T-val').textContent = T;
+    document.getElementById('angle-val').textContent = postAngle;
+    document.getElementById('OB-val').textContent = OB_dist.toFixed(2);
+    document.getElementById('AB-formula').textContent = c.AB2.toFixed(3);
+    document.getElementById('AB-display').textContent = c.AB.toFixed(3);
+    document.getElementById('alpha-display').textContent = c.alpha.toFixed(2);
+    document.getElementById('Ft-display').textContent = c.Ft.toFixed(2);
+    document.getElementById('Fn-display').textContent = c.Fn.toFixed(2);
+    document.getElementById('check-display').textContent =
+      Math.sqrt(c.Ft*c.Ft + c.Fn*c.Fn).toFixed(1);
+  }
+
+  document.getElementById('T-slider').addEventListener('input', e => {
+    T = parseFloat(e.target.value); render();
+  });
+  document.getElementById('angle-slider').addEventListener('input', e => {
+    postAngle = parseFloat(e.target.value); render();
+  });
+  document.getElementById('OB-slider').addEventListener('input', e => {
+    OB_dist = parseFloat(e.target.value); render();
+  });
+
+  render();
+})();
+
+// ============ CONCEPT 1: Moment ============
+(function(){
+  const svg = document.getElementById('svg-moment');
+  const ns = 'http://www.w3.org/2000/svg';
+  const W = 460, H = 300;
+  const padL = 60, padR = 40, padT = 25, padB = 40;
+  const PHYS_W = 4, PHYS_H = 3;
+  const sx = (W - padL - padR) / PHYS_W;
+  const sy = (H - padT - padB) / PHYS_H;
+  const px = xm => padL + xm * sx;
+  const py = ym => H - padB - ym * sy;
+  const unpx = pxv => (pxv - padL) / sx;
+  const unpy = pyv => (H - padB - pyv) / sy;
+
+  function el(tag, attrs) {
+    const n = document.createElementNS(ns, tag);
+    for (const k in attrs) n.setAttribute(k, attrs[k]);
+    return n;
+  }
+  function text(x, y, content, fill, sz, weight, anchor) {
+    const t = el('text', {x, y, fill:fill||'#222', 'font-size':sz||12, 'font-weight':weight||400, 'text-anchor':anchor||'start'});
+    t.textContent = content; return t;
+  }
+  function arrow(x1, y1, x2, y2, color, sw) {
+    const g = el('g', {});
+    const dx = x2-x1, dy = y2-y1;
+    const len = Math.sqrt(dx*dx+dy*dy);
+    if (len < 1) return g;
+    const ux = dx/len, uy = dy/len;
+    g.appendChild(el('line', {x1,y1,x2,y2,stroke:color,'stroke-width':sw||2.5,'stroke-linecap':'round'}));
+    const hL=9, hW=5;
+    const bx=x2-ux*hL, by=y2-uy*hL;
+    const pxr=-uy*hW, pyr=ux*hW;
+    g.appendChild(el('polygon', {points:`${x2},${y2} ${bx+pxr},${by+pyr} ${bx-pxr},${by-pyr}`, fill:color}));
+    return g;
+  }
+
+  const REF = {x: 0, y: 0};
+  const Fy_val = 3;
+  let P = {x: 2.5, y: 1.5};
+
+  function render() {
+    svg.innerHTML = '';
+    // Grid
+    const g = el('g', {opacity:'0.3'});
+    for (let i = 0; i <= PHYS_W; i++) g.appendChild(el('line', {x1:px(i),y1:py(0),x2:px(i),y2:py(PHYS_H),stroke:'#ccc','stroke-dasharray':'2,3'}));
+    for (let j = 0; j <= PHYS_H; j++) g.appendChild(el('line', {x1:px(0),y1:py(j),x2:px(PHYS_W),y2:py(j),stroke:'#ccc','stroke-dasharray':'2,3'}));
+    svg.appendChild(g);
+    for (let i = 0; i <= PHYS_W; i++) svg.appendChild(text(px(i), H-padB+13, i+'m', '#999', 10, 400, 'middle'));
+    for (let j = 0; j <= PHYS_H; j++) svg.appendChild(text(padL-8, py(j)+3, j+'m', '#999', 10, 400, 'end'));
+
+    // Line of action (vertical through P, faint blue)
+    svg.appendChild(el('line', {x1:px(P.x), y1:py(0)+2, x2:px(P.x), y2:py(PHYS_H)-2, stroke:'#1976d2', 'stroke-dasharray':'3,3', 'stroke-width':1, opacity:0.4}));
+
+    // r vector (gray dashed)
+    svg.appendChild(el('line', {x1:px(REF.x), y1:py(REF.y), x2:px(P.x), y2:py(P.y), stroke:'#888', 'stroke-dasharray':'4,3', 'stroke-width':1.5, opacity:0.7}));
+    const rlen = Math.sqrt(P.x*P.x + P.y*P.y);
+    svg.appendChild(text((px(REF.x)+px(P.x))/2 - 4, (py(REF.y)+py(P.y))/2 - 6, `|r|=${rlen.toFixed(2)}m`, '#666', 10, 600));
+
+    // d (perpendicular distance, green thick along horizontal at y=REF.y)
+    svg.appendChild(el('line', {x1:px(REF.x), y1:py(REF.y), x2:px(P.x), y2:py(REF.y), stroke:'#558b2f', 'stroke-width':3.5, 'stroke-linecap':'round'}));
+    svg.appendChild(text((px(REF.x)+px(P.x))/2, py(REF.y)+18, `d = ${Math.abs(P.x).toFixed(2)} m`, '#558b2f', 12, 700, 'middle'));
+
+    // F arrow (upward from P)
+    const FpxLen = 50;
+    svg.appendChild(arrow(px(P.x), py(P.y), px(P.x), py(P.y)-FpxLen, '#1976d2', 3));
+    svg.appendChild(text(px(P.x)+10, py(P.y)-FpxLen/2, 'F = 3 kN', '#1976d2', 12, 700));
+
+    // Reference dot
+    svg.appendChild(el('circle', {cx:px(REF.x), cy:py(REF.y), r:5, fill:'#c62828'}));
+    svg.appendChild(text(px(REF.x)-8, py(REF.y)+15, 'O', '#c62828', 13, 700, 'end'));
+
+    // P (green draggable)
+    svg.appendChild(el('circle', {cx:px(P.x), cy:py(P.y), r:8, fill:'#43a047', stroke:'white', 'stroke-width':2, style:'cursor:grab;'}));
+    svg.appendChild(text(px(P.x)+12, py(P.y)+5, 'P', '#1b5e20', 13, 700));
+
+    // Update
+    const M = (P.x - REF.x) * Fy_val;
+    document.getElementById('m-rx').textContent = (P.x - REF.x).toFixed(2);
+    document.getElementById('m-ry').textContent = (P.y - REF.y).toFixed(2);
+    document.getElementById('m-d').textContent = Math.abs(P.x - REF.x).toFixed(2);
+    document.getElementById('m-val').textContent = (M >= 0 ? '+' : '') + M.toFixed(2);
+  }
+
+  let dragging = false;
+  function getCoords(cx, cy) { const pt = svg.createSVGPoint(); pt.x = cx; pt.y = cy; return pt.matrixTransform(svg.getScreenCTM().inverse()); }
+  function setP(cx, cy) {
+    const c = getCoords(cx, cy);
+    P.x = Math.max(0.1, Math.min(PHYS_W - 0.1, unpx(c.x)));
+    P.y = Math.max(0.1, Math.min(PHYS_H - 0.4, unpy(c.y)));
+    render();
+  }
+  svg.addEventListener('mousedown', e => { dragging = true; setP(e.clientX, e.clientY); });
+  svg.addEventListener('mousemove', e => { if (dragging) setP(e.clientX, e.clientY); });
+  window.addEventListener('mouseup', () => dragging = false);
+  svg.addEventListener('touchstart', e => { e.preventDefault(); dragging = true; const t = e.touches[0]; setP(t.clientX, t.clientY); }, {passive:false});
+  svg.addEventListener('touchmove', e => { if (!dragging) return; e.preventDefault(); const t = e.touches[0]; setP(t.clientX, t.clientY); }, {passive:false});
+  svg.addEventListener('touchend', () => dragging = false);
+
+  render();
+})();
+
+// ============ CONCEPT 2: Varignon ============
+(function(){
+  const svg = document.getElementById('svg-varignon');
+  const ns = 'http://www.w3.org/2000/svg';
+  const W = 460, H = 300;
+  const padL = 60, padR = 40, padT = 25, padB = 40;
+  const PHYS_W = 4, PHYS_H = 3;
+  const sx = (W - padL - padR) / PHYS_W;
+  const sy = (H - padT - padB) / PHYS_H;
+  const px = xm => padL + xm * sx;
+  const py = ym => H - padB - ym * sy;
+  const unpx = pxv => (pxv - padL) / sx;
+  const unpy = pyv => (H - padB - pyv) / sy;
+  const fScale = 13;
+
+  function el(tag, attrs) {
+    const n = document.createElementNS(ns, tag);
+    for (const k in attrs) n.setAttribute(k, attrs[k]);
+    return n;
+  }
+  function text(x, y, content, fill, sz, weight, anchor) {
+    const t = el('text', {x, y, fill:fill||'#222', 'font-size':sz||12, 'font-weight':weight||400, 'text-anchor':anchor||'start'});
+    t.textContent = content; return t;
+  }
+  function arrow(x1, y1, x2, y2, color, sw) {
+    const g = el('g', {});
+    const dx = x2-x1, dy = y2-y1;
+    const len = Math.sqrt(dx*dx+dy*dy);
+    if (len < 1) return g;
+    const ux = dx/len, uy = dy/len;
+    g.appendChild(el('line', {x1,y1,x2,y2,stroke:color,'stroke-width':sw||2.5,'stroke-linecap':'round'}));
+    const hL=9, hW=5;
+    const bx=x2-ux*hL, by=y2-uy*hL;
+    const pxr=-uy*hW, pyr=ux*hW;
+    g.appendChild(el('polygon', {points:`${x2},${y2} ${bx+pxr},${by+pyr} ${bx-pxr},${by-pyr}`, fill:color}));
+    return g;
+  }
+
+  const REF = {x: 0, y: 0};
+  const Fmag = 5;
+  let theta = 30;
+  let P = {x: 3, y: 2};
+
+  function render() {
+    svg.innerHTML = '';
+    // Grid
+    const g = el('g', {opacity:'0.3'});
+    for (let i = 0; i <= PHYS_W; i++) g.appendChild(el('line', {x1:px(i),y1:py(0),x2:px(i),y2:py(PHYS_H),stroke:'#ccc','stroke-dasharray':'2,3'}));
+    for (let j = 0; j <= PHYS_H; j++) g.appendChild(el('line', {x1:px(0),y1:py(j),x2:px(PHYS_W),y2:py(j),stroke:'#ccc','stroke-dasharray':'2,3'}));
+    svg.appendChild(g);
+    for (let i = 0; i <= PHYS_W; i++) svg.appendChild(text(px(i), H-padB+13, i+'m', '#999', 10, 400, 'middle'));
+    for (let j = 0; j <= PHYS_H; j++) svg.appendChild(text(padL-8, py(j)+3, j+'m', '#999', 10, 400, 'end'));
+
+    const rad = theta * Math.PI / 180;
+    const Fx = Fmag * Math.cos(rad);
+    const Fy = Fmag * Math.sin(rad);
+
+    // r vector
+    svg.appendChild(el('line', {x1:px(REF.x), y1:py(REF.y), x2:px(P.x), y2:py(P.y), stroke:'#888', 'stroke-dasharray':'4,3', 'stroke-width':1, opacity:0.5}));
+
+    // Components first (so resultant overlays)
+    if (Math.abs(Fx) > 0.05) {
+      svg.appendChild(arrow(px(P.x), py(P.y), px(P.x) + Fx*fScale, py(P.y), '#c62828', 2));
+      svg.appendChild(text(px(P.x) + Fx*fScale/2, py(P.y) + 16, `Fx=${Fx.toFixed(2)}`, '#c62828', 10, 600, 'middle'));
+    }
+    if (Math.abs(Fy) > 0.05) {
+      svg.appendChild(arrow(px(P.x), py(P.y), px(P.x), py(P.y) - Fy*fScale, '#1976d2', 2));
+      svg.appendChild(text(px(P.x) + 8, py(P.y) - Fy*fScale/2 + 4, `Fy=${Fy.toFixed(2)}`, '#1976d2', 10, 600));
+    }
+    // Resultant F
+    svg.appendChild(arrow(px(P.x), py(P.y), px(P.x) + Fx*fScale, py(P.y) - Fy*fScale, '#8e24aa', 3.5));
+    svg.appendChild(text(px(P.x) + Fx*fScale + 6, py(P.y) - Fy*fScale - 6, 'F=5 kN', '#8e24aa', 12, 700));
+
+    // Reference
+    svg.appendChild(el('circle', {cx:px(REF.x), cy:py(REF.y), r:5, fill:'#c62828'}));
+    svg.appendChild(text(px(REF.x)-8, py(REF.y)+15, 'O', '#c62828', 13, 700, 'end'));
+
+    // P
+    svg.appendChild(el('circle', {cx:px(P.x), cy:py(P.y), r:7, fill:'#43a047', stroke:'white', 'stroke-width':2, style:'cursor:grab;'}));
+    svg.appendChild(text(px(P.x)-10, py(P.y)+5, 'P', '#1b5e20', 13, 700, 'end'));
+
+    // Update
+    const rx = P.x - REF.x, ry = P.y - REF.y;
+    const M_Fx = -ry * Fx;
+    const M_Fy = rx * Fy;
+    const M_F = rx * Fy - ry * Fx;
+    document.getElementById('v-rx').textContent = rx.toFixed(1);
+    document.getElementById('v-ry').textContent = ry.toFixed(1);
+    document.getElementById('v-fx').textContent = Fx.toFixed(2);
+    document.getElementById('v-fy').textContent = Fy.toFixed(2);
+    document.getElementById('v-mfx').textContent = (M_Fx >= 0 ? '+' : '') + M_Fx.toFixed(2);
+    document.getElementById('v-mfy').textContent = (M_Fy >= 0 ? '+' : '') + M_Fy.toFixed(2);
+    document.getElementById('v-sum').textContent = (M_F >= 0 ? '+' : '') + M_F.toFixed(2);
+    document.getElementById('v-mf').textContent = (M_F >= 0 ? '+' : '') + M_F.toFixed(2);
+    document.getElementById('v-angle-val').textContent = theta;
+  }
+
+  let dragging = false;
+  function getCoords(cx, cy) { const pt = svg.createSVGPoint(); pt.x = cx; pt.y = cy; return pt.matrixTransform(svg.getScreenCTM().inverse()); }
+  function setP(cx, cy) {
+    const c = getCoords(cx, cy);
+    P.x = Math.max(0.5, Math.min(PHYS_W - 0.2, unpx(c.x)));
+    P.y = Math.max(0.5, Math.min(PHYS_H - 0.2, unpy(c.y)));
+    render();
+  }
+  svg.addEventListener('mousedown', e => { dragging = true; setP(e.clientX, e.clientY); });
+  svg.addEventListener('mousemove', e => { if (dragging) setP(e.clientX, e.clientY); });
+  window.addEventListener('mouseup', () => dragging = false);
+  svg.addEventListener('touchstart', e => { e.preventDefault(); dragging = true; const t = e.touches[0]; setP(t.clientX, t.clientY); }, {passive:false});
+  svg.addEventListener('touchmove', e => { if (!dragging) return; e.preventDefault(); const t = e.touches[0]; setP(t.clientX, t.clientY); }, {passive:false});
+  svg.addEventListener('touchend', () => dragging = false);
+
+  document.getElementById('v-angle-slider').addEventListener('input', e => {
+    theta = parseFloat(e.target.value);
+    render();
+  });
+
+  render();
+})();
+</script>
+</body>
+</html>
