@@ -155,12 +155,99 @@ footer {
 }
 footer a { color: #999; }
 
+/* ---- Interactive phase tables ---- */
+.phase-progress {
+  display: flex; align-items: center; gap: 12px;
+  margin: 10px 0 14px;
+  font-size: 13px;
+}
+.progress-bar {
+  flex: 1; height: 8px;
+  background: #ececec; border-radius: 4px;
+  overflow: hidden;
+}
+.progress-bar-fill {
+  height: 100%; width: 0%;
+  background: #2a6df4;
+  transition: width 0.3s ease;
+}
+.progress-text {
+  color: #555; min-width: 86px;
+  font-variant-numeric: tabular-nums;
+}
+.phase-progress-green  .progress-bar-fill { background: #2e7d32; }
+.phase-progress-orange .progress-bar-fill { background: #e65100; }
+.phase-progress-red    .progress-bar-fill { background: #c62828; }
+.phase-progress-purple .progress-bar-fill { background: #6a1b9a; }
+
+.reset-btn {
+  border: 1px solid #ddd; background: white;
+  border-radius: 4px; padding: 4px 10px;
+  font-size: 12px; cursor: pointer;
+  color: #666;
+}
+.reset-btn:hover {
+  background: #fdf2f2; color: #c62828; border-color: #c62828;
+}
+
+table.editable td.num {
+  white-space: nowrap;
+  text-align: left;
+  padding-left: 10px;
+}
+table.editable td.num input[type="checkbox"] {
+  margin: 0 6px 0 0;
+  width: 16px; height: 16px;
+  cursor: pointer;
+  vertical-align: middle;
+  accent-color: #2a6df4;
+}
+table.editable td.num .task-num {
+  color: #999; font-size: 12px;
+  font-variant-numeric: tabular-nums;
+}
+table.editable td[contenteditable="true"] {
+  cursor: text;
+}
+table.editable td[contenteditable="true"]:hover {
+  background: #fafafa;
+}
+table.editable td[contenteditable="true"]:focus {
+  outline: 2px solid #2a6df4;
+  outline-offset: -2px;
+  background: #fffbe6;
+}
+table.editable tbody tr.done td:not(.num) {
+  text-decoration: line-through;
+  color: #999;
+}
+table.editable tbody tr.done td.num .task-num {
+  text-decoration: line-through;
+}
+table.editable tbody tr.done {
+  background: #f5f7f5 !important;
+}
+
+.edit-hint {
+  font-size: 12px; color: #888;
+  margin: -4px 0 10px;
+  font-style: italic;
+}
+
+.reset-all-wrap {
+  text-align: right;
+  margin: -8px 0 10px;
+}
+.reset-all-wrap .reset-btn { font-size: 12px; }
+
 @media (max-width: 640px) {
   body { padding: 20px 14px 48px; }
   section { padding: 18px 16px; }
   h1 { font-size: 24px; }
   table { font-size: 13px; }
   th, td { padding: 7px 8px; }
+  .phase-progress { flex-wrap: wrap; }
+  .progress-text { min-width: 0; }
 }
 </style>
 </head>
@@ -403,7 +490,13 @@ footer a { color: #999; }
 <section id="phase1">
   <h2 class="green">Phase I — Foundations <span style="color:#666;font-weight:400;font-size:14px;">(6 hours: 5h self-study + 1h tutor Q&amp;A)</span></h2>
   <p class="lead"><strong>Goal:</strong> Be able to compute the support reactions for any 2D rigid body.</p>
-  <table class="phase-i">
+  <div class="phase-progress phase-progress-green" id="phase-1-progress">
+    <span class="progress-text">0 / 0 done</span>
+    <div class="progress-bar"><div class="progress-bar-fill"></div></div>
+    <button type="button" class="reset-btn" data-reset-phase="1">Reset Phase</button>
+  </div>
+  <p class="edit-hint">点击复选框打钩；点击任意单元格直接编辑（自动保存到浏览器）。</p>
+  <table class="phase-i editable" id="phase-1-table">
     <thead>
       <tr><th class="num">#</th><th>Task</th><th class="time">Time</th><th>Self-check / Notes</th></tr>
     </thead>
@@ -426,7 +519,12 @@ footer a { color: #999; }
 <section id="phase2">
   <h2 class="orange">Phase II — Static Indeterminacy &amp; Trusses <span style="color:#666;font-weight:400;font-size:14px;">(4 hours: 3h self-study + 1h tutor Q&amp;A)</span></h2>
   <p class="lead"><strong>Goal:</strong> Pass oral exam Problems 1 and 2.</p>
-  <table class="phase-ii">
+  <div class="phase-progress phase-progress-orange" id="phase-2-progress">
+    <span class="progress-text">0 / 0 done</span>
+    <div class="progress-bar"><div class="progress-bar-fill"></div></div>
+    <button type="button" class="reset-btn" data-reset-phase="2">Reset Phase</button>
+  </div>
+  <table class="phase-ii editable" id="phase-2-table">
     <thead>
       <tr><th class="num">#</th><th>Task</th><th class="time">Time</th><th>Self-check / Notes</th></tr>
     </thead>
@@ -447,7 +545,12 @@ footer a { color: #999; }
 <section id="phase3">
   <h2 class="red">Phase III — Internal Action Diagrams <span style="color:#666;font-weight:400;font-size:14px;">(6 hours: 4h self-study + 2h tutor Q&amp;A)</span></h2>
   <p class="lead"><strong>Goal:</strong> Pass oral exam Problem 3 and the written exam part (e). This is the largest scoring section — give it the most attention.</p>
-  <table class="phase-iii">
+  <div class="phase-progress phase-progress-red" id="phase-3-progress">
+    <span class="progress-text">0 / 0 done</span>
+    <div class="progress-bar"><div class="progress-bar-fill"></div></div>
+    <button type="button" class="reset-btn" data-reset-phase="3">Reset Phase</button>
+  </div>
+  <table class="phase-iii editable" id="phase-3-table">
     <thead>
       <tr><th class="num">#</th><th>Task</th><th class="time">Time</th><th>Self-check / Notes</th></tr>
     </thead>
@@ -468,7 +571,12 @@ footer a { color: #999; }
 <section id="phase4">
   <h2 class="purple">Phase IV — Closed Structures &amp; Mock Exam <span style="color:#666;font-weight:400;font-size:14px;">(4 hours: 2h self-study + 2h tutor Q&amp;A)</span></h2>
   <p class="lead">This is the hardest phase. Schedule tutor Q&amp;A #4 <strong>BEFORE</strong> you start the self-study tasks.</p>
-  <table class="phase-iv">
+  <div class="phase-progress phase-progress-purple" id="phase-4-progress">
+    <span class="progress-text">0 / 0 done</span>
+    <div class="progress-bar"><div class="progress-bar-fill"></div></div>
+    <button type="button" class="reset-btn" data-reset-phase="4">Reset Phase</button>
+  </div>
+  <table class="phase-iv editable" id="phase-4-table">
     <thead>
       <tr><th class="num">#</th><th>Task</th><th class="time">Time</th><th>Self-check / Notes</th></tr>
     </thead>
@@ -540,9 +648,141 @@ footer a { color: #999; }
   </p>
 </section>
 
+<div class="reset-all-wrap">
+  <button type="button" class="reset-btn" id="reset-all-btn">Reset all phases</button>
+</div>
+
 <footer>
-  <p><a href="index.html">← Back to index</a> · Built with vanilla HTML / CSS. No tracking, no dependencies.</p>
+  <p><a href="index.html">← Back to index</a> · Progress &amp; edits saved in your browser only (localStorage). No tracking, no server.</p>
 </footer>
+
+<script>
+(function() {
+  const STORAGE_KEY = 'statics-study-plan-v1';
+  const PHASE_IDS = ['1', '2', '3', '4'];
+  const FIELDS = ['task', 'time', 'note'];
+
+  function loadState() {
+    try { return JSON.parse(localStorage.getItem(STORAGE_KEY)) || {}; }
+    catch { return {}; }
+  }
+  function saveState(s) {
+    try { localStorage.setItem(STORAGE_KEY, JSON.stringify(s)); }
+    catch (e) { console.warn('localStorage save failed', e); }
+  }
+  function getTask(s, phase, task) {
+    s[phase] = s[phase] || {};
+    s[phase][task] = s[phase][task] || {};
+    return s[phase][task];
+  }
+
+  function initPhase(phaseId) {
+    const table = document.getElementById(`phase-${phaseId}-table`);
+    if (!table) return;
+    const state = loadState();
+    const rows = table.querySelectorAll('tbody tr');
+
+    rows.forEach((tr, idx) => {
+      const taskId = String(idx + 1);
+      const t = getTask(state, phaseId, taskId);
+
+      const cells = tr.children;
+      const numCell  = cells[0];
+      const taskCell = cells[1];
+      const timeCell = cells[2];
+      const noteCell = cells[3];
+
+      // Build checkbox + number label
+      const num = numCell.textContent.trim();
+      numCell.innerHTML = '';
+      const cb = document.createElement('input');
+      cb.type = 'checkbox';
+      cb.checked = !!t.done;
+      cb.setAttribute('aria-label', `Mark task ${num} done`);
+      numCell.appendChild(cb);
+      const lbl = document.createElement('span');
+      lbl.className = 'task-num';
+      lbl.textContent = num;
+      numCell.appendChild(lbl);
+
+      // Make 3 cells editable + restore stored edits
+      const fieldCells = { task: taskCell, time: timeCell, note: noteCell };
+      FIELDS.forEach(field => {
+        const cell = fieldCells[field];
+        cell.contentEditable = 'true';
+        cell.spellcheck = false;
+        if (typeof t[field] === 'string') {
+          cell.innerHTML = t[field];
+        }
+      });
+
+      function applyDoneClass() {
+        tr.classList.toggle('done', cb.checked);
+      }
+      applyDoneClass();
+
+      cb.addEventListener('change', () => {
+        const s = loadState();
+        getTask(s, phaseId, taskId).done = cb.checked;
+        saveState(s);
+        applyDoneClass();
+        updateProgress(phaseId);
+      });
+
+      FIELDS.forEach(field => {
+        const cell = fieldCells[field];
+        cell.addEventListener('input', () => {
+          const s = loadState();
+          getTask(s, phaseId, taskId)[field] = cell.innerHTML;
+          saveState(s);
+        });
+        // Prevent Enter from creating ugly <div> linebreaks; insert <br> instead
+        cell.addEventListener('keydown', (e) => {
+          if (e.key === 'Enter' && !e.shiftKey) {
+            e.preventDefault();
+            document.execCommand('insertLineBreak');
+          }
+        });
+      });
+    });
+
+    updateProgress(phaseId);
+  }
+
+  function updateProgress(phaseId) {
+    const table = document.getElementById(`phase-${phaseId}-table`);
+    const wrap  = document.getElementById(`phase-${phaseId}-progress`);
+    if (!table || !wrap) return;
+    const total = table.querySelectorAll('tbody tr').length;
+    const done  = table.querySelectorAll('tbody tr.done').length;
+    const pct = total > 0 ? (done / total) * 100 : 0;
+    wrap.querySelector('.progress-text').textContent = `${done} / ${total} done`;
+    wrap.querySelector('.progress-bar-fill').style.width = pct + '%';
+  }
+
+  function resetPhase(phaseId) {
+    if (!confirm(`Reset Phase ${phaseId}? 所有勾选和编辑都会清掉，恢复原始内容。`)) return;
+    const s = loadState();
+    delete s[phaseId];
+    saveState(s);
+    location.reload();
+  }
+
+  function resetAll() {
+    if (!confirm('Reset 全部 4 个 Phase 的勾选和编辑？此操作不可撤销。')) return;
+    localStorage.removeItem(STORAGE_KEY);
+    location.reload();
+  }
+
+  document.addEventListener('click', (e) => {
+    const btn = e.target.closest('[data-reset-phase]');
+    if (btn) { resetPhase(btn.dataset.resetPhase); return; }
+    if (e.target.id === 'reset-all-btn') { resetAll(); }
+  });
+
+  PHASE_IDS.forEach(initPhase);
+})();
+</script>
 
 </body>
 </html>
