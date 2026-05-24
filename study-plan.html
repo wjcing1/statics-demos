@@ -1,0 +1,548 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Statics 097430 — 20-Hour Self-Study Plan</title>
+<style>
+* { box-sizing: border-box; }
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", sans-serif;
+  margin: 0; padding: 32px 24px 64px;
+  background: #fafafa; color: #222;
+  max-width: 920px; margin-left: auto; margin-right: auto;
+  line-height: 1.6;
+}
+header { margin-bottom: 28px; }
+h1 {
+  font-size: 28px; margin: 0 0 6px;
+  color: #1a3a8f;
+  letter-spacing: -0.01em;
+}
+.subtitle { color: #666; font-size: 14px; margin-bottom: 4px; }
+.subtitle.small { font-size: 13px; }
+
+nav.toc {
+  background: white; border: 1px solid #e3e3e3;
+  border-radius: 8px; padding: 16px 20px;
+  margin: 24px 0 32px;
+  font-size: 14px;
+}
+nav.toc strong { display: block; margin-bottom: 8px; color: #555; font-size: 12px; text-transform: uppercase; letter-spacing: 0.06em; }
+nav.toc a {
+  display: inline-block; margin-right: 14px; margin-bottom: 4px;
+  color: #2a6df4; text-decoration: none;
+}
+nav.toc a:hover { text-decoration: underline; }
+
+section {
+  background: white; border: 1px solid #e3e3e3;
+  border-radius: 8px; padding: 22px 26px;
+  margin-bottom: 24px;
+}
+section h2 {
+  font-size: 20px; margin: 0 0 4px;
+  letter-spacing: -0.01em;
+}
+section h2.blue   { color: #1a3a8f; }
+section h2.green  { color: #2e7d32; }
+section h2.orange { color: #e65100; }
+section h2.red    { color: #c62828; }
+section h2.purple { color: #6a1b9a; }
+
+section .lead { color: #555; font-size: 14px; margin: 0 0 18px; }
+
+table {
+  width: 100%; border-collapse: collapse;
+  font-size: 14px;
+  margin: 12px 0 8px;
+}
+th, td {
+  border: 1px solid #e3e3e3;
+  padding: 9px 12px; text-align: left;
+  vertical-align: top;
+}
+th {
+  background: #1a3a8f; color: white;
+  font-weight: 600; font-size: 13px;
+}
+tbody tr:nth-child(even) { background: #f7f9fc; }
+td.num, th.num { text-align: center; width: 50px; }
+td.time, th.time { white-space: nowrap; width: 90px; }
+
+table.phase-i  th { background: #2e7d32; }
+table.phase-ii th { background: #e65100; }
+table.phase-iii th { background: #c62828; }
+table.phase-iv th { background: #6a1b9a; }
+
+.checkpoint {
+  background: #fff8e1; border-left: 4px solid #ffa000;
+  padding: 12px 16px; margin: 14px 0 4px;
+  font-size: 14px; border-radius: 0 4px 4px 0;
+}
+.checkpoint strong { color: #8a6d00; }
+
+.priority-note {
+  background: #fff8e1; border-left: 4px solid #ffa000;
+  padding: 12px 16px; margin: 14px 0 4px;
+  font-size: 14px; border-radius: 0 4px 4px 0;
+}
+
+ul.topic-list {
+  list-style: none; padding: 0; margin: 0;
+}
+ul.topic-list > li {
+  margin-bottom: 14px;
+}
+ul.topic-list > li h3 {
+  font-size: 15px; margin: 0 0 4px;
+  font-weight: 600;
+}
+ul.topic-list > li h3 .stars { color: #f57f17; margin-left: 6px; font-size: 13px; }
+ul.topic-list > li h3 .tag {
+  font-size: 12px; color: #666;
+  font-weight: 400; margin-left: 6px;
+}
+ul.topic-list ul {
+  margin: 4px 0 0 0; padding-left: 22px;
+  font-size: 14px; color: #444;
+}
+ul.topic-list ul li { margin-bottom: 2px; }
+
+.topic-a h3 { color: #2e7d32; }
+.topic-b h3 { color: #2e7d32; }
+.topic-c h3 { color: #e65100; }
+.topic-d h3 { color: #e65100; }
+.topic-e h3 { color: #c62828; }
+.topic-f h3 { color: #6a1b9a; }
+
+ol.rules {
+  padding-left: 22px; margin: 8px 0 0;
+  font-size: 15px;
+}
+ol.rules li { margin-bottom: 8px; }
+
+.golden-rules-card {
+  background: #f3f6fb; border: 1px solid #d6e0ee;
+}
+
+.budget-summary {
+  display: flex; gap: 12px; flex-wrap: wrap;
+  margin: 12px 0;
+}
+.budget-pill {
+  background: #f3f6fb; border: 1px solid #d6e0ee;
+  border-radius: 6px; padding: 10px 16px;
+  font-size: 14px;
+  flex: 1; min-width: 180px;
+}
+.budget-pill .num {
+  font-size: 22px; font-weight: 700;
+  color: #1a3a8f; display: block;
+}
+.budget-pill .label { color: #666; font-size: 13px; }
+
+.method-note {
+  background: #e8f5e9; border-left: 4px solid #2e7d32;
+  padding: 12px 16px; margin: 14px 0 4px;
+  font-size: 14px; border-radius: 0 4px 4px 0;
+  color: #1b5e20;
+}
+
+footer {
+  margin-top: 40px; text-align: center;
+  font-size: 12px; color: #999;
+}
+footer a { color: #999; }
+
+@media (max-width: 640px) {
+  body { padding: 20px 14px 48px; }
+  section { padding: 18px 16px; }
+  h1 { font-size: 24px; }
+  table { font-size: 13px; }
+  th, td { padding: 7px 8px; }
+}
+</style>
+</head>
+<body>
+
+<header>
+  <h1>Statics 097430 — 20-Hour Self-Study Plan</h1>
+  <p class="subtitle">Politecnico di Milano · School of Architecture, Urban Planning and Construction Engineering</p>
+  <p class="subtitle small">For a self-paced learner starting from zero background. Targets both the written exam and the oral exam.</p>
+</header>
+
+<nav class="toc">
+  <strong>Contents</strong>
+  <a href="#exam">Exam Format</a>
+  <a href="#map">Knowledge Map</a>
+  <a href="#materials">Materials → Exam</a>
+  <a href="#how">How It Works</a>
+  <a href="#selfstudy">How to Self-Study</a>
+  <a href="#phase1">Phase I</a>
+  <a href="#phase2">Phase II</a>
+  <a href="#phase3">Phase III</a>
+  <a href="#phase4">Phase IV</a>
+  <a href="#budget">Time Budget</a>
+  <a href="#schedule">10-Day Schedule</a>
+  <a href="#rules">Golden Rules</a>
+</nav>
+
+<!-- ========= EXAM FORMAT ========= -->
+<section id="exam">
+  <h2 class="blue">Exam Format — What You Are Preparing For</h2>
+  <p class="lead"><strong>Written Exam</strong> — 2 hours, one long question. Always a Closed Structure analysis split into 5 parts. Total weight ≈ 30+ points.</p>
+  <table>
+    <thead>
+      <tr><th>Part</th><th>What you must do</th><th class="num">Points</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>(a)</td><td>Verify isostatic — compute DSI = ED + ID</td><td class="num">1</td></tr>
+      <tr><td>(b)</td><td>Global equilibrium → external support reactions</td><td class="num">3–4</td></tr>
+      <tr><td>(c)</td><td>Draw the Initial Free-Body Diagram (split into sub-systems, label unknowns)</td><td class="num">4</td></tr>
+      <tr><td>(d)</td><td>Draw the Final FBD (solve sub-system equilibrium, find all internal hinge forces)</td><td class="num">4–6</td></tr>
+      <tr><td>(e)</td><td>Draw N, V, M diagrams (functions per segment + critical values)</td><td class="num">15–18</td></tr>
+    </tbody>
+  </table>
+
+  <p class="lead" style="margin-top:18px;"><strong>Oral Exam</strong> — 45 minutes, three problems.</p>
+  <table>
+    <thead>
+      <tr><th class="num">#</th><th>What to expect</th></tr>
+    </thead>
+    <tbody>
+      <tr><td class="num">P1</td><td>Concept — Method of nodes vs Method of sections (Ritter): purpose &amp; differences</td></tr>
+      <tr><td class="num">P2</td><td>DSI for 3 structures → isostatic / hypostatic / hyperstatic; for unstable cases, draw the failure mechanism</td></tr>
+      <tr><td class="num">P3</td><td>N, V, M diagrams — usually a three-hinged arch or simple portal frame (smaller than the written)</td></tr>
+    </tbody>
+  </table>
+</section>
+
+<!-- ========= KNOWLEDGE MAP ========= -->
+<section id="map">
+  <h2 class="blue">Knowledge Map — What You Need to Learn</h2>
+  <p class="lead">Six topic clusters. The stars indicate exam weight: more stars = more points on the actual exam.</p>
+
+  <ul class="topic-list">
+    <li class="topic-a">
+      <h3>A. Basics <span class="tag">foundation — no direct exam points, but needed for everything</span></h3>
+      <ul>
+        <li>A1. Units &amp; vector algebra</li>
+        <li>A2. Force composition, couples, moments</li>
+        <li>A3. Varignon's principle, statically equivalent forces</li>
+        <li>A4. Support types &amp; degrees of freedom (pin / roller / fixed / double pendulum)</li>
+      </ul>
+    </li>
+    <li class="topic-b">
+      <h3>B. Equilibrium &amp; Reactions <span class="tag">needed for written (b), oral P3 prep</span></h3>
+      <ul>
+        <li>B1. Rigid body equilibrium: Sum F<sub>x</sub>=0, Sum F<sub>y</sub>=0, Sum M=0</li>
+        <li>B2. Support reactions</li>
+        <li>B3. Distributed loads (uniform / triangular / trapezoidal)</li>
+      </ul>
+    </li>
+    <li class="topic-c">
+      <h3>C. Degree of Static Indeterminacy (DSI) <span class="stars">★★★</span> <span class="tag">oral P2 + written (a)</span></h3>
+      <ul>
+        <li>C1. DSI = ED + ID</li>
+        <li>C2. ED = external constraints − 3</li>
+        <li>C3. ID = internal constraints − 3 per cut</li>
+        <li>C4. Classify as isostatic / hyperstatic / hypostatic</li>
+        <li>C5. Draw the failure mechanism for unstable cases</li>
+      </ul>
+    </li>
+    <li class="topic-d">
+      <h3>D. Trusses <span class="stars">★★★</span> <span class="tag">oral P1</span></h3>
+      <ul>
+        <li>D1. Method of joints (node equilibrium)</li>
+        <li>D2. Method of Ritter (sections — cut through 3 bars)</li>
+        <li>D3. Purpose / differences — the oral P1 answer</li>
+      </ul>
+    </li>
+    <li class="topic-e">
+      <h3>E. Internal action diagrams N / V / M <span class="stars">★★★</span> <span class="tag">written (e) + oral P3 — biggest weight</span></h3>
+      <ul>
+        <li>E1. Section method; N, V, M sign conventions</li>
+        <li>E2. 27 master problems on simple beams (a)–(aa)</li>
+        <li>E3. Differential relations: dV/dx = −q, dM/dx = V (M extremum where V = 0)</li>
+        <li>E4. Portal frames N / V / M</li>
+        <li>E5. Three-hinged arch — high frequency in oral P3</li>
+      </ul>
+    </li>
+    <li class="topic-f">
+      <h3>F. Closed structures <span class="stars">★★★★★</span> <span class="tag">integrates A–E; this IS the written exam</span></h3>
+      <ul>
+        <li>F1. ED + ID for closed loops</li>
+        <li>F2. Split into 3 sub-systems</li>
+        <li>F3. Initial FBD: label all sub-system unknowns</li>
+        <li>F4. Final FBD: 9 equations to solve every internal force</li>
+        <li>F5. Per-bar N / V / M with the rule of compass consistency check</li>
+      </ul>
+    </li>
+  </ul>
+</section>
+
+<!-- ========= MATERIALS MAPPING ========= -->
+<section id="materials">
+  <h2 class="blue">Materials → Exam Mapping — Where to Find What</h2>
+  <p class="lead">All files live in the <code>Statics_WeBeep</code> folder, under <code>01_Slides</code> / <code>02_List_of_Exercises</code> / <code>03_Practical_Class_Notes</code> / <code>04_Solved_Exercises</code> / <code>05_Past_Exams</code>.</p>
+
+  <table>
+    <thead>
+      <tr><th>Topic</th><th>Lecture / Slides</th><th>Practice</th><th>Solved / examples</th><th>Used in exam</th></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>A1–A2 Basics, vectors</td>
+        <td>Chapter_1_Revision; Class 1</td>
+        <td>Practical_notes_1 (Prob 1.1–2.9)</td>
+        <td>Lesson_19_09_2024</td>
+        <td>Foundation</td>
+      </tr>
+      <tr>
+        <td>A3 Varignon / equivalent forces</td>
+        <td>Class 2</td>
+        <td>Practical_notes_2 (Prob 1.1–2.4)</td>
+        <td>Lesson_03_10_2024; exercise_2.2_2.3_2.7_2.8; Pract_sheet_1_ex2.9</td>
+        <td>Foundation</td>
+      </tr>
+      <tr>
+        <td>B Equilibrium + reactions</td>
+        <td>Class 3 — Equilibrium</td>
+        <td>Practical_notes_3 (Prob 3.1–3.4)</td>
+        <td>Class 4 Eq. Exercises 10_14 &amp; 10_17</td>
+        <td>Written (b); oral P3 prep</td>
+      </tr>
+      <tr>
+        <td>C DSI ★★★</td>
+        <td>Class 5 — Degree of Static Indeterminacy</td>
+        <td>Apply to 22_01_2024_Oral_Exam Prob 2</td>
+        <td>—</td>
+        <td>Oral P2 + Written (a)</td>
+      </tr>
+      <tr>
+        <td>D Trusses ★★★</td>
+        <td>Class 6 (joints); Class 7 (Ritter)</td>
+        <td>Practical_notes_4 (Prob 4.1–4.8)</td>
+        <td>Pract_sheet_4_Ex_4.1_4.3_4.6_4.7</td>
+        <td>Oral P1</td>
+      </tr>
+      <tr>
+        <td>E1–E4 N / V / M ★★★</td>
+        <td>Class 8 — Internal actions I; Class 10 — Internal actions II</td>
+        <td>Practical_notes_5 (39 p, Prob 5.1–5.10); Individual_exercises_Practical_sheet_5 (27 master probs a–aa)</td>
+        <td>Practical_Class_14_11_2024; Exercise 5.2; 5.8a, 5.8c, 5.9a, 5.9b; Problem_5.8a_class; Exercise_5.7c_corrected_typo</td>
+        <td>Written (e) + Oral P3</td>
+      </tr>
+      <tr>
+        <td>F Closed structures ★★★★★</td>
+        <td>Class 11 — Closed Structures; Lesson_16_12_2024</td>
+        <td>Practical_notes_5 second half (Prob 5.3 onwards)</td>
+        <td>Exercises 4.2 &amp; 4.7; Dr. Bosi's 7-page hand solution</td>
+        <td>Entire written exam</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="priority-note">
+    <strong>Priority order for tutoring time (highest scoring rate first):</strong> F → E → C → D → B → A.
+    The plan in the next sections follows roughly this order while still respecting the prerequisites
+    (A and B come first because everything else needs them).
+  </div>
+</section>
+
+<!-- ========= HOW IT WORKS ========= -->
+<section id="how">
+  <h2 class="blue">How This Plan Works</h2>
+  <p class="lead">You will spend about 20 hours total. The plan is divided into 4 phases. Move at your own pace — the times are guidelines, not deadlines.</p>
+  <div class="budget-summary">
+    <div class="budget-pill"><span class="num">~14 h</span><span class="label">Self-study (you, alone)</span></div>
+    <div class="budget-pill"><span class="num">~6 h</span><span class="label">Tutor Q&amp;A (4 checkpoints)</span></div>
+    <div class="budget-pill"><span class="num">20 h</span><span class="label">Total</span></div>
+  </div>
+</section>
+
+<!-- ========= HOW TO SELF-STUDY ========= -->
+<section id="selfstudy">
+  <h2 class="blue">How to Self-Study</h2>
+
+  <h3 style="font-size:15px;margin:8px 0 4px;color:#1a3a8f;">Reading the slides</h3>
+  <ul style="margin:0 0 14px;padding-left:22px;font-size:14px;">
+    <li>Spend no more than 3 minutes per slide. If something is unclear, mark it and keep going.</li>
+    <li>After each slide deck, close it and write 3 summary sentences in your own words. If you cannot, re-read it.</li>
+    <li>Save unclear points and bring 3 or more to your tutor in one batch.</li>
+  </ul>
+
+  <h3 style="font-size:15px;margin:8px 0 4px;color:#1a3a8f;">Solving exercises</h3>
+  <ul style="margin:0 0 18px;padding-left:22px;font-size:14px;">
+    <li>Try independently — do not peek at the answer.</li>
+    <li>Compare with the solution PDF in the <code>04_Solved_Exercises</code> folder.</li>
+    <li>Mark mistakes with X and write one line: where I went wrong.</li>
+    <li>Once you have 3+ errors, schedule the next tutor Q&amp;A.</li>
+  </ul>
+
+  <h3 style="font-size:15px;margin:8px 0 4px;color:#1a3a8f;">Key terms to memorize early</h3>
+  <table>
+    <thead>
+      <tr><th>Term</th><th>Meaning</th><th>Symbol</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>Axial force</td><td>Internal pulling / pushing along the bar</td><td>N</td></tr>
+      <tr><td>Shear force</td><td>Internal force perpendicular to the bar</td><td>V</td></tr>
+      <tr><td>Bending moment</td><td>Internal moment causing bending</td><td>M</td></tr>
+      <tr><td>Hinge</td><td>Connection that allows rotation</td><td>—</td></tr>
+      <tr><td>Roller / Pin / Fixed</td><td>Support types (1 / 2 / 3 unknown reactions)</td><td>—</td></tr>
+      <tr><td>Free-Body Diagram</td><td>Isolated drawing of forces on a body</td><td>FBD</td></tr>
+      <tr><td>Reaction</td><td>Force exerted by a support</td><td>—</td></tr>
+      <tr><td>Degree of Static Indeterminacy</td><td>Stability classification number</td><td>DSI</td></tr>
+    </tbody>
+  </table>
+</section>
+
+<!-- ========= PHASE I ========= -->
+<section id="phase1">
+  <h2 class="green">Phase I — Foundations <span style="color:#666;font-weight:400;font-size:14px;">(6 hours: 5h self-study + 1h tutor Q&amp;A)</span></h2>
+  <p class="lead"><strong>Goal:</strong> Be able to compute the support reactions for any 2D rigid body.</p>
+  <table class="phase-i">
+    <thead>
+      <tr><th class="num">#</th><th>Task</th><th class="time">Time</th><th>Self-check / Notes</th></tr>
+    </thead>
+    <tbody>
+      <tr><td class="num">1</td><td>Read Chapter_1_Revision + Class 1</td><td class="time">45 min</td><td>Memorize: 1 kN = 1000 N; 1 MPa = 1 N/mm²</td></tr>
+      <tr><td class="num">2</td><td>Solve Practical_notes_1 Prob 1.1–1.4</td><td class="time">30 min</td><td>Get at least 7/9 correct</td></tr>
+      <tr><td class="num">3</td><td>Read Class 2 — Varignon's principle</td><td class="time">60 min</td><td>Explain Varignon in one sentence</td></tr>
+      <tr><td class="num">4</td><td>Solve Practical_notes_2 Prob 1.1–2.4</td><td class="time">45 min</td><td>Check vs exercise_2.2_2.3_2.7_2.8</td></tr>
+      <tr><td class="num">5</td><td>Read Class 3 — Equilibrium</td><td class="time">60 min</td><td>Memorize Sum F<sub>x</sub>=0, Sum F<sub>y</sub>=0, Sum M=0</td></tr>
+      <tr><td class="num">6</td><td>Solve Practical_notes_3 Prob 3.1 + 3.2 (a–c)</td><td class="time">60 min</td><td>Reaction counts must be correct</td></tr>
+    </tbody>
+  </table>
+  <div class="checkpoint">
+    <strong>Tutor checkpoint #1 (~1h):</strong> bring your error log and the unclear slides. Expect to clarify:
+    (a) force decomposition with sin/cos, (b) moment sign convention, (c) how to count reactions for each support type.
+  </div>
+</section>
+
+<!-- ========= PHASE II ========= -->
+<section id="phase2">
+  <h2 class="orange">Phase II — Static Indeterminacy &amp; Trusses <span style="color:#666;font-weight:400;font-size:14px;">(4 hours: 3h self-study + 1h tutor Q&amp;A)</span></h2>
+  <p class="lead"><strong>Goal:</strong> Pass oral exam Problems 1 and 2.</p>
+  <table class="phase-ii">
+    <thead>
+      <tr><th class="num">#</th><th>Task</th><th class="time">Time</th><th>Self-check / Notes</th></tr>
+    </thead>
+    <tbody>
+      <tr><td class="num">1</td><td>Read Class 5 — DSI (twice if needed)</td><td class="time">60 min</td><td>Write the formula DSI = ED + ID from memory</td></tr>
+      <tr><td class="num">2</td><td>Apply DSI to 22_01_2024_Oral_Exam Problem 2 parts (a)(b)(c)</td><td class="time">30 min</td><td>Compute ED, ID, DSI for each</td></tr>
+      <tr><td class="num">3</td><td>Read Class 6 — Method of joints</td><td class="time">45 min</td><td>Restate: start from a node with 2 unknowns</td></tr>
+      <tr><td class="num">4</td><td>Read Class 7 — Method of Ritter</td><td class="time">45 min</td><td>Restate: cut through 3 bars</td></tr>
+    </tbody>
+  </table>
+  <div class="checkpoint">
+    <strong>Tutor checkpoint #2 (~1h):</strong> verify DSI counting (especially ID at internal hinges), and rehearse the oral P1 contrast:
+    Method of nodes solves all bars by node equilibrium; Method of Ritter solves a few selected bars by cutting through three.
+  </div>
+</section>
+
+<!-- ========= PHASE III ========= -->
+<section id="phase3">
+  <h2 class="red">Phase III — Internal Action Diagrams <span style="color:#666;font-weight:400;font-size:14px;">(6 hours: 4h self-study + 2h tutor Q&amp;A)</span></h2>
+  <p class="lead"><strong>Goal:</strong> Pass oral exam Problem 3 and the written exam part (e). This is the largest scoring section — give it the most attention.</p>
+  <table class="phase-iii">
+    <thead>
+      <tr><th class="num">#</th><th>Task</th><th class="time">Time</th><th>Self-check / Notes</th></tr>
+    </thead>
+    <tbody>
+      <tr><td class="num">1</td><td>Read Class 8 — Internal actions I</td><td class="time">60 min</td><td>Memorize N, V, M sign conventions</td></tr>
+      <tr><td class="num">2</td><td>Solve master problems (a)–(e) in Individual_exercises_Practical_sheet_5 (simple beams)</td><td class="time">60 min</td><td>Compare with Practical_notes_5 solutions</td></tr>
+      <tr><td class="num">3</td><td>Solve master problems (f)–(o) (multi-support + bends)</td><td class="time">60 min</td><td>Verify M continuity at every bend</td></tr>
+      <tr><td class="num">4</td><td>Read Class 10 — Internal actions II</td><td class="time">30 min</td><td>—</td></tr>
+      <tr><td class="num">5</td><td>Solve master problems (p)–(aa) (cantilevers + portal frames)</td><td class="time">30 min</td><td>Get at least 6 correct</td></tr>
+    </tbody>
+  </table>
+  <div class="checkpoint">
+    <strong>Tutor checkpoint #3 (~2h, split into two sessions):</strong> <em>Session A</em> — diagnose your error patterns in beam diagrams; learn the differential relations dV/dx = −q and dM/dx = V (M extremum where V = 0). <em>Session B</em> — walk through a three-hinged arch together to lock down oral P3.
+  </div>
+</section>
+
+<!-- ========= PHASE IV ========= -->
+<section id="phase4">
+  <h2 class="purple">Phase IV — Closed Structures &amp; Mock Exam <span style="color:#666;font-weight:400;font-size:14px;">(4 hours: 2h self-study + 2h tutor Q&amp;A)</span></h2>
+  <p class="lead">This is the hardest phase. Schedule tutor Q&amp;A #4 <strong>BEFORE</strong> you start the self-study tasks.</p>
+  <table class="phase-iv">
+    <thead>
+      <tr><th class="num">#</th><th>Task</th><th class="time">Time</th><th>Self-check / Notes</th></tr>
+    </thead>
+    <tbody>
+      <tr><td class="num">1</td><td>Tutor Q&amp;A #4 — Part 1: closed-structure walkthrough</td><td class="time">60 min</td><td>Listen first, take notes, then study</td></tr>
+      <tr><td class="num">2</td><td>Re-read Class 11 — Closed Structures</td><td class="time">45 min</td><td>Focus on sub-system splitting</td></tr>
+      <tr><td class="num">3</td><td>Copy by hand Dr. Bosi's 7-page solution</td><td class="time">60 min</td><td>Pen on paper, step by step</td></tr>
+      <tr><td class="num">4</td><td>Independently solve Exam_Like_exercise_2 steps (a)–(d)</td><td class="time">15 min</td><td>Compare with the printed solution</td></tr>
+      <tr><td class="num">5</td><td>Tutor Q&amp;A #4 — Part 2: full mock exam</td><td class="time">60 min</td><td>Timed written attempt + oral Q&amp;A simulation</td></tr>
+    </tbody>
+  </table>
+  <div class="method-note">
+    <strong>Method for closed structures:</strong> split into 3 sub-systems → 9 equilibrium equations → all internal connection forces → draw N, V, M for each bar. Use the rule of compass (M continuous at every corner) as a free error-check.
+  </div>
+</section>
+
+<!-- ========= TIME BUDGET ========= -->
+<section id="budget">
+  <h2 class="blue">Time Budget Summary</h2>
+  <table>
+    <thead>
+      <tr><th>Phase</th><th class="time">Self-study</th><th class="time">Tutor Q&amp;A</th><th class="time">Total</th><th>Milestone</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>I — Foundations</td><td class="time">5h</td><td class="time">1h</td><td class="time">6h</td><td>Can solve reactions</td></tr>
+      <tr><td>II — DSI + Trusses</td><td class="time">3h</td><td class="time">1h</td><td class="time">4h</td><td>Oral P1 + P2 secured</td></tr>
+      <tr><td>III — Internal diagrams</td><td class="time">4h</td><td class="time">2h</td><td class="time">6h</td><td>Oral P3 secured</td></tr>
+      <tr><td>IV — Closed + mock</td><td class="time">2h</td><td class="time">2h</td><td class="time">4h</td><td>Written exam secured</td></tr>
+      <tr style="font-weight:600;background:#f3f6fb;"><td>Total</td><td class="time">14h</td><td class="time">6h</td><td class="time">20h</td><td>—</td></tr>
+    </tbody>
+  </table>
+</section>
+
+<!-- ========= 10-DAY SCHEDULE ========= -->
+<section id="schedule">
+  <h2 class="blue">Suggested 10-Day Schedule</h2>
+  <p class="lead">Spread the 20 hours across roughly 10 days; do not cram. Statics needs your brain to digest concepts overnight. 1–3 hours per day is ideal.</p>
+  <table>
+    <thead>
+      <tr><th class="num">Day</th><th>Content</th><th class="time">Time</th></tr>
+    </thead>
+    <tbody>
+      <tr><td class="num">1</td><td>Phase I tasks 1–3</td><td class="time">2.5h</td></tr>
+      <tr><td class="num">2</td><td>Phase I tasks 4–6 + collect questions</td><td class="time">2.5h</td></tr>
+      <tr><td class="num">3</td><td>Tutor Q&amp;A #1</td><td class="time">1h</td></tr>
+      <tr><td class="num">4</td><td>Phase II self-study</td><td class="time">3h</td></tr>
+      <tr><td class="num">5</td><td>Tutor Q&amp;A #2</td><td class="time">1h</td></tr>
+      <tr><td class="num">6</td><td>Phase III tasks 1–3</td><td class="time">2h</td></tr>
+      <tr><td class="num">7</td><td>Tutor Q&amp;A #3 (Session A)</td><td class="time">1h</td></tr>
+      <tr><td class="num">8</td><td>Phase III tasks 4–5 + Tutor Q&amp;A #3 (Session B)</td><td class="time">2h</td></tr>
+      <tr><td class="num">9</td><td>Tutor Q&amp;A #4 Part 1 + Phase IV self-study</td><td class="time">3h</td></tr>
+      <tr><td class="num">10</td><td>Tutor Q&amp;A #4 Part 2 — full mock exam</td><td class="time">1h</td></tr>
+    </tbody>
+  </table>
+</section>
+
+<!-- ========= GOLDEN RULES ========= -->
+<section id="rules" class="golden-rules-card">
+  <h2 class="blue">5 Golden Rules — Pin These Above Your Desk</h2>
+  <ol class="rules">
+    <li>When stuck, mark and move on. Never spend 30 minutes on one slide.</li>
+    <li>Always draw the Free-Body Diagram first. No FBD = no points.</li>
+    <li>Counter-clockwise moment is always positive. Use this convention consistently.</li>
+    <li>At every bend in a frame, M must be continuous. Use this as a free error-check.</li>
+    <li>Your error log matters more than your notes. Track every mistake; you will see patterns.</li>
+  </ol>
+  <p style="margin-top:16px;color:#555;font-size:14px;font-style:italic;">
+    Good luck. Statics rewards consistency, not last-minute effort. If you keep the error log and finish the master problems honestly, you are already in good shape.
+  </p>
+</section>
+
+<footer>
+  <p><a href="index.html">← Back to index</a> · Built with vanilla HTML / CSS. No tracking, no dependencies.</p>
+</footer>
+
+</body>
+</html>
