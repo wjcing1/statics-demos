@@ -102,6 +102,14 @@ table.summary th { background: #f0f4ff; }
   font-size: 15px;
 }
 .steps li { margin-bottom: 6px; }
+.steps.detailed { margin: 8px 0 0; padding-left: 22px; }
+.steps.detailed > li { margin-bottom: 13px; line-height: 1.55; }
+.steps.detailed > li > b { color: #1a1a1a; }
+.steps.detailed .formula { margin: 7px 0 0; }
+.fbd-legend { display: flex; gap: 18px; flex-wrap: wrap; font-size: 12px; margin: 10px 0 0; color: #444; }
+.fbd-legend span { display: inline-flex; align-items: center; gap: 6px; }
+.fbd-legend i { width: 18px; height: 0; border-top: 3px solid; display: inline-block; }
+.col-left h4, .col-right h4 { margin-top: 0; }
 </style>
 </head>
 <body>
@@ -540,190 +548,260 @@ of each reaction follows from balancing the applied moment.
 
 <!-- ============ (d) ============ -->
 <div class="sub">
-<div class="sub-title">(d) Cantilever fixed at A · two 10 kN ↓ loads · 5 kN ← horizontal at the tip</div>
+<div class="sub-title">(d) Cantilever fixed at A · two 10 kN ↓ loads · 5 kN ← at the tip · L = 5 m</div>
 <div class="row">
 <div class="col-left">
-<svg viewBox="0 0 380 200">
+<h4>Given structure</h4>
+<svg viewBox="0 0 400 190">
   <pattern id="gd" patternUnits="userSpaceOnUse" width="6" height="6" patternTransform="rotate(45)">
     <line x1="0" y1="0" x2="0" y2="6" stroke="#888" stroke-width="1"/>
   </pattern>
-  <!-- wall fixed at A -->
-  <rect x="40" y="40" width="14" height="80" fill="url(#gd)" stroke="#666"/>
-  <line x1="54" y1="40" x2="54" y2="120" stroke="#222" stroke-width="2"/>
-  <!-- beam, A at 54, B at 54+0.6*300=234, tip at 54+300=354... but use 3m+2m total 5m -->
-  <line x1="54" y1="80" x2="334" y2="80" stroke="#222" stroke-width="3"/>
-  <!-- load at 3m (x = 54+(3/5)*280=222) -->
-  <line x1="222" y1="30" x2="222" y2="76" stroke="#c62828" stroke-width="2"/>
-  <polygon points="222,80 216,70 228,70" fill="#c62828"/>
-  <text x="232" y="48" font-size="12" fill="#c62828" font-weight="600">10 kN</text>
-  <!-- load at tip (x = 334) downward -->
-  <line x1="334" y1="30" x2="334" y2="76" stroke="#c62828" stroke-width="2"/>
-  <polygon points="334,80 328,70 340,70" fill="#c62828"/>
-  <text x="318" y="26" font-size="12" fill="#c62828" font-weight="600">10 kN</text>
-  <!-- horizontal load 5kN pointing left at tip -->
-  <line x1="370" y1="98" x2="334" y2="98" stroke="#c62828" stroke-width="2"/>
-  <polygon points="334,98 344,92 344,104" fill="#c62828"/>
-  <text x="345" y="118" font-size="12" fill="#c62828" font-weight="600">5 kN</text>
-  <text x="40" y="72" font-size="12" text-anchor="end">A</text>
-  <line x1="54" y1="140" x2="222" y2="140" stroke="#444"/>
-  <line x1="54" y1="135" x2="54" y2="145" stroke="#444"/>
-  <line x1="222" y1="135" x2="222" y2="145" stroke="#444"/>
-  <text x="138" y="155" font-size="12" text-anchor="middle">3.0 m</text>
-  <line x1="222" y1="140" x2="334" y2="140" stroke="#444"/>
-  <line x1="334" y1="135" x2="334" y2="145" stroke="#444"/>
-  <text x="278" y="155" font-size="12" text-anchor="middle">2.0 m</text>
+  <rect x="54" y="52" width="16" height="86" fill="url(#gd)" stroke="#666"/>
+  <line x1="70" y1="52" x2="70" y2="138" stroke="#222" stroke-width="2"/>
+  <line x1="70" y1="95" x2="350" y2="95" stroke="#222" stroke-width="3"/>
+  <line x1="238" y1="46" x2="238" y2="91" stroke="#c62828" stroke-width="2"/>
+  <polygon points="238,95 233,84 243,84" fill="#c62828"/>
+  <text x="244" y="58" font-size="12" fill="#c62828" font-weight="600">10 kN</text>
+  <line x1="350" y1="46" x2="350" y2="91" stroke="#c62828" stroke-width="2"/>
+  <polygon points="350,95 345,84 355,84" fill="#c62828"/>
+  <text x="332" y="40" font-size="12" fill="#c62828" font-weight="600">10 kN</text>
+  <line x1="392" y1="113" x2="356" y2="113" stroke="#c62828" stroke-width="2"/>
+  <polygon points="350,113 361,108 361,118" fill="#c62828"/>
+  <text x="352" y="130" font-size="12" fill="#c62828" font-weight="600">5 kN</text>
+  <text x="50" y="90" font-size="12" text-anchor="end" font-weight="600">A</text>
+  <line x1="70" y1="158" x2="238" y2="158" stroke="#444"/>
+  <line x1="70" y1="153" x2="70" y2="163" stroke="#444"/>
+  <line x1="238" y1="153" x2="238" y2="163" stroke="#444"/>
+  <text x="154" y="173" font-size="12" text-anchor="middle">3.0 m</text>
+  <line x1="238" y1="158" x2="350" y2="158" stroke="#444"/>
+  <line x1="350" y1="153" x2="350" y2="163" stroke="#444"/>
+  <text x="294" y="173" font-size="12" text-anchor="middle">2.0 m</text>
 </svg>
 </div>
 <div class="col-right">
-<h4>FBD &amp; Equilibrium</h4>
-<div class="formula">Σ F<sub>x</sub> = 0:
-   H<sub>A</sub> − 5 = 0           ← external 5 kN points to the left
-   ⇒  H<sub>A</sub> = 5 kN →
-
-Σ F<sub>y</sub> = 0:
-   V<sub>A</sub> − 10 − 10 = 0
-   ⇒  V<sub>A</sub> = 20 kN ↑
-
-Σ M<sub>A</sub> = 0 (CCW⁺):
-   M<sub>A</sub> − 10·(3) − 10·(5) = 0
-   ⇒  M<sub>A</sub> = 80 kN·m ↺ (CCW)</div>
+<h4>Free-body diagram</h4>
+<svg viewBox="0 0 400 190">
+  <line x1="70" y1="95" x2="350" y2="95" stroke="#222" stroke-width="3"/>
+  <line x1="238" y1="46" x2="238" y2="91" stroke="#c62828" stroke-width="2"/>
+  <polygon points="238,95 233,84 243,84" fill="#c62828"/>
+  <text x="244" y="58" font-size="12" fill="#c62828" font-weight="600">10 kN</text>
+  <line x1="350" y1="46" x2="350" y2="91" stroke="#c62828" stroke-width="2"/>
+  <polygon points="350,95 345,84 355,84" fill="#c62828"/>
+  <text x="332" y="40" font-size="12" fill="#c62828" font-weight="600">10 kN</text>
+  <line x1="392" y1="113" x2="356" y2="113" stroke="#c62828" stroke-width="2"/>
+  <polygon points="350,113 361,108 361,118" fill="#c62828"/>
+  <text x="352" y="130" font-size="12" fill="#c62828" font-weight="600">5 kN</text>
+  <line x1="70" y1="152" x2="70" y2="102" stroke="#1565c0" stroke-width="2.5"/>
+  <polygon points="70,95 64,107 76,107" fill="#1565c0"/>
+  <text x="78" y="146" font-size="13" fill="#1565c0" font-weight="700">V<tspan font-size="9" dy="3">A</tspan></text>
+  <line x1="22" y1="95" x2="58" y2="95" stroke="#1565c0" stroke-width="2.5"/>
+  <polygon points="70,95 56,89 56,101" fill="#1565c0"/>
+  <text x="16" y="88" font-size="13" fill="#1565c0" font-weight="700">H<tspan font-size="9" dy="3">A</tspan></text>
+  <g transform="translate(70,95)">
+    <path d="M 0 -30 A 30 30 0 1 0 30 0" fill="none" stroke="#1565c0" stroke-width="2.5"/>
+    <polygon points="0,-30 6,-23 -5,-22" fill="#1565c0"/>
+  </g>
+  <text x="40" y="56" font-size="13" fill="#1565c0" font-weight="700">M<tspan font-size="9" dy="3">A</tspan></text>
+  <text x="84" y="113" font-size="12" font-weight="600">A</text>
+</svg>
+<div class="fbd-legend">
+  <span><i style="border-color:#c62828"></i>applied load</span>
+  <span><i style="border-color:#1565c0"></i>support reaction</span>
+</div>
+</div>
+</div>
+<h4>Step-by-step solution</h4>
+<ol class="steps detailed">
+<li><b>Count the reactions.</b> A clamp (fixed support) blocks horizontal translation, vertical translation <em>and</em> rotation ⇒ 3 unknowns: H<sub>A</sub>, V<sub>A</sub>, M<sub>A</sub>. The tip is free, so no reactions there.</li>
+<li><b>Horizontal equilibrium</b> &nbsp;Σ F<sub>x</sub> = 0&nbsp; (→ positive). The only horizontal force is the 5 kN pulling left:
+<div class="formula">H<sub>A</sub> − 5 = 0   ⇒   H<sub>A</sub> = 5 kN  (→)</div></li>
+<li><b>Vertical equilibrium</b> &nbsp;Σ F<sub>y</sub> = 0&nbsp; (↑ positive). Both 10 kN loads point down:
+<div class="formula">V<sub>A</sub> − 10 − 10 = 0   ⇒   V<sub>A</sub> = 20 kN  (↑)</div></li>
+<li><b>Moment about A</b> &nbsp;Σ M<sub>A</sub> = 0&nbsp; (CCW positive). Summing moments <em>at A</em> makes H<sub>A</sub> and V<sub>A</sub> drop out (zero arm). Each downward load sits to the right of A, turning the beam clockwise (negative), so the clamp resists counter‑clockwise:
+<div class="formula">M<sub>A</sub> − 10·(3) − 10·(5) = 0   ⇒   M<sub>A</sub> = 80 kN·m  (↺)</div></li>
+<li><b>Why the 5 kN drops out of the moment.</b> Its line of action runs <em>along</em> the beam axis, straight through A, so its lever arm about A is zero. A force makes a moment only when it is offset from the point.</li>
+</ol>
 <div class="answer">
-V<sub>A</sub> = 20 kN (↑) &nbsp; H<sub>A</sub> = 5 kN (→) &nbsp; M<sub>A</sub> = 80 kN·m (↺)
+V<sub>A</sub> = 20 kN (↑) &nbsp;&nbsp; H<sub>A</sub> = 5 kN (→) &nbsp;&nbsp; M<sub>A</sub> = 80 kN·m (↺)
 </div>
-<div class="note">
-The 5 kN horizontal force passes through the beam axis (same line as A) ⇒ no contribution to the
-moment about A. Always check the line of action before adding a force × arm.
-</div>
-</div>
-</div>
+<div class="note"><b>Sanity check:</b> the beam is held at one end only, so the clamp alone must carry every applied force (20 kN up, 5 kN across) and resist the full overturning moment (80 kN·m). ✓</div>
 </div>
 
 
 <!-- ============ (e) ============ -->
 <div class="sub">
-<div class="sub-title">(e) Simply supported beam · UDL q = 5 kN/m on full span 10 m</div>
+<div class="sub-title">(e) Simply supported beam · UDL q = 5 kN/m over the full span · L = 10 m</div>
 <div class="row">
 <div class="col-left">
-<svg viewBox="0 0 380 200">
+<h4>Given structure</h4>
+<svg viewBox="0 0 400 200">
   <pattern id="ge" patternUnits="userSpaceOnUse" width="6" height="6" patternTransform="rotate(45)">
     <line x1="0" y1="0" x2="0" y2="6" stroke="#888" stroke-width="1"/>
   </pattern>
-  <line x1="40" y1="90" x2="340" y2="90" stroke="#222" stroke-width="3"/>
-  <!-- udl arrows -->
+  <line x1="60" y1="95" x2="360" y2="95" stroke="#222" stroke-width="3"/>
   <g stroke="#c62828" stroke-width="1.5" fill="#c62828">
-    <line x1="40" y1="50" x2="340" y2="50"/>
-    <g>
-    <line x1="55" y1="50" x2="55" y2="86"/><polygon points="55,90 51,82 59,82"/>
-    <line x1="85" y1="50" x2="85" y2="86"/><polygon points="85,90 81,82 89,82"/>
-    <line x1="115" y1="50" x2="115" y2="86"/><polygon points="115,90 111,82 119,82"/>
-    <line x1="145" y1="50" x2="145" y2="86"/><polygon points="145,90 141,82 149,82"/>
-    <line x1="175" y1="50" x2="175" y2="86"/><polygon points="175,90 171,82 179,82"/>
-    <line x1="205" y1="50" x2="205" y2="86"/><polygon points="205,90 201,82 209,82"/>
-    <line x1="235" y1="50" x2="235" y2="86"/><polygon points="235,90 231,82 239,82"/>
-    <line x1="265" y1="50" x2="265" y2="86"/><polygon points="265,90 261,82 269,82"/>
-    <line x1="295" y1="50" x2="295" y2="86"/><polygon points="295,90 291,82 299,82"/>
-    <line x1="325" y1="50" x2="325" y2="86"/><polygon points="325,90 321,82 329,82"/>
-    </g>
+    <line x1="60" y1="52" x2="360" y2="52"/>
+    <line x1="75" y1="52" x2="75" y2="91"/><polygon points="75,95 71,86 79,86"/>
+    <line x1="105" y1="52" x2="105" y2="91"/><polygon points="105,95 101,86 109,86"/>
+    <line x1="135" y1="52" x2="135" y2="91"/><polygon points="135,95 131,86 139,86"/>
+    <line x1="165" y1="52" x2="165" y2="91"/><polygon points="165,95 161,86 169,86"/>
+    <line x1="195" y1="52" x2="195" y2="91"/><polygon points="195,95 191,86 199,86"/>
+    <line x1="225" y1="52" x2="225" y2="91"/><polygon points="225,95 221,86 229,86"/>
+    <line x1="255" y1="52" x2="255" y2="91"/><polygon points="255,95 251,86 259,86"/>
+    <line x1="285" y1="52" x2="285" y2="91"/><polygon points="285,95 281,86 289,86"/>
+    <line x1="315" y1="52" x2="315" y2="91"/><polygon points="315,95 311,86 319,86"/>
+    <line x1="345" y1="52" x2="345" y2="91"/><polygon points="345,95 341,86 349,86"/>
   </g>
-  <text x="160" y="42" font-size="13" fill="#c62828" font-weight="600">5 kN/m</text>
-  <!-- A roller, C pin (per the solution labels) -->
-  <polygon points="40,90 30,106 50,106" fill="#fff" stroke="#222" stroke-width="1.5"/>
-  <circle cx="34" cy="111" r="3" fill="#fff" stroke="#222"/>
-  <circle cx="40" cy="111" r="3" fill="#fff" stroke="#222"/>
-  <circle cx="46" cy="111" r="3" fill="#fff" stroke="#222"/>
-  <rect x="24" y="115" width="32" height="6" fill="url(#ge)" stroke="#666"/>
-  <polygon points="340,90 330,108 350,108" fill="#fff" stroke="#222" stroke-width="1.5"/>
-  <rect x="324" y="108" width="32" height="6" fill="url(#ge)" stroke="#666"/>
-  <text x="34" y="82" font-size="12">A</text>
-  <text x="346" y="82" font-size="12">C</text>
-  <line x1="40" y1="140" x2="340" y2="140" stroke="#444"/>
-  <line x1="40" y1="135" x2="40" y2="145" stroke="#444"/>
-  <line x1="340" y1="135" x2="340" y2="145" stroke="#444"/>
-  <text x="190" y="155" font-size="12" text-anchor="middle">10.00 m</text>
+  <text x="210" y="44" font-size="13" fill="#c62828" font-weight="600" text-anchor="middle">q = 5 kN/m</text>
+  <polygon points="60,95 50,111 70,111" fill="#fff" stroke="#222" stroke-width="1.5"/>
+  <circle cx="54" cy="116" r="3" fill="#fff" stroke="#222"/>
+  <circle cx="60" cy="116" r="3" fill="#fff" stroke="#222"/>
+  <circle cx="66" cy="116" r="3" fill="#fff" stroke="#222"/>
+  <rect x="44" y="120" width="32" height="6" fill="url(#ge)" stroke="#666"/>
+  <polygon points="360,95 350,113 370,113" fill="#fff" stroke="#222" stroke-width="1.5"/>
+  <rect x="344" y="113" width="32" height="6" fill="url(#ge)" stroke="#666"/>
+  <text x="54" y="89" font-size="12" text-anchor="end" font-weight="600">A</text>
+  <text x="372" y="89" font-size="12" font-weight="600">C</text>
+  <line x1="60" y1="150" x2="360" y2="150" stroke="#444"/>
+  <line x1="60" y1="145" x2="60" y2="155" stroke="#444"/>
+  <line x1="360" y1="145" x2="360" y2="155" stroke="#444"/>
+  <text x="210" y="165" font-size="12" text-anchor="middle">10.00 m</text>
 </svg>
 </div>
 <div class="col-right">
-<h4>FBD &amp; Equilibrium</h4>
-<div class="formula">Replace UDL by its resultant:
-   R = q·L = 5·10 = 50 kN, acting at L/2 = 5 m from A.
-
-Σ F<sub>x</sub> = 0:   H<sub>C</sub> = 0
-
-Σ M<sub>A</sub> = 0:
-   V<sub>C</sub>·(10) − 50·(5) = 0
-   ⇒  V<sub>C</sub> = 250/10 = 25 kN ↑
-
-Σ F<sub>y</sub> = 0:
-   V<sub>A</sub> + V<sub>C</sub> − 50 = 0
-   ⇒  V<sub>A</sub> = 25 kN ↑</div>
+<h4>FBD — distributed load → its resultant</h4>
+<svg viewBox="0 0 400 200">
+  <line x1="60" y1="95" x2="360" y2="95" stroke="#222" stroke-width="3"/>
+  <line x1="210" y1="44" x2="210" y2="91" stroke="#6a1b9a" stroke-width="2.5" stroke-dasharray="5,3"/>
+  <polygon points="210,95 204,84 216,84" fill="#6a1b9a"/>
+  <text x="210" y="36" font-size="12" fill="#6a1b9a" font-weight="700" text-anchor="middle">R = qL = 50 kN</text>
+  <line x1="60" y1="120" x2="210" y2="120" stroke="#6a1b9a" stroke-dasharray="3,3"/>
+  <line x1="60" y1="116" x2="60" y2="124" stroke="#6a1b9a"/>
+  <line x1="210" y1="116" x2="210" y2="124" stroke="#6a1b9a"/>
+  <text x="135" y="134" font-size="11" fill="#6a1b9a" text-anchor="middle">5 m</text>
+  <line x1="60" y1="160" x2="60" y2="102" stroke="#1565c0" stroke-width="2.5"/>
+  <polygon points="60,95 54,107 66,107" fill="#1565c0"/>
+  <text x="66" y="154" font-size="13" fill="#1565c0" font-weight="700">V<tspan font-size="9" dy="3">A</tspan></text>
+  <line x1="360" y1="160" x2="360" y2="102" stroke="#1565c0" stroke-width="2.5"/>
+  <polygon points="360,95 354,107 366,107" fill="#1565c0"/>
+  <text x="366" y="154" font-size="13" fill="#1565c0" font-weight="700">V<tspan font-size="9" dy="3">C</tspan></text>
+  <line x1="360" y1="78" x2="388" y2="78" stroke="#1565c0" stroke-width="2.5"/>
+  <polygon points="392,78 381,73 381,83" fill="#1565c0"/>
+  <text x="362" y="72" font-size="13" fill="#1565c0" font-weight="700">H<tspan font-size="9" dy="3">C</tspan></text>
+  <text x="54" y="89" font-size="12" text-anchor="end" font-weight="600">A</text>
+  <text x="354" y="113" font-size="12" text-anchor="end" font-weight="600">C</text>
+</svg>
+<div class="fbd-legend">
+  <span><i style="border-color:#c62828"></i>applied load</span>
+  <span><i style="border-color:#6a1b9a"></i>resultant of UDL</span>
+  <span><i style="border-color:#1565c0"></i>support reaction</span>
+</div>
+</div>
+</div>
+<h4>Step-by-step solution</h4>
+<ol class="steps detailed">
+<li><b>Replace the distributed load.</b> A uniform load over a length is equivalent to a single resultant at its centroid (the middle of the rectangle):
+<div class="formula">R = q · L = 5 · 10 = 50 kN,   acting at x = L/2 = 5 m from A</div></li>
+<li><b>Count the reactions.</b> A = roller ⇒ one vertical reaction V<sub>A</sub>; C = pin ⇒ V<sub>C</sub> + H<sub>C</sub>. 3 unknowns, 3 equations ⇒ determinate.</li>
+<li><b>Horizontal equilibrium</b> &nbsp;Σ F<sub>x</sub> = 0. There is no horizontal applied load:
+<div class="formula">H<sub>C</sub> = 0</div></li>
+<li><b>Moment about A</b> &nbsp;Σ M<sub>A</sub> = 0&nbsp; (CCW positive). Only R and V<sub>C</sub> have a lever arm about A:
+<div class="formula">V<sub>C</sub>·(10) − 50·(5) = 0   ⇒   V<sub>C</sub> = 250 / 10 = 25 kN  (↑)</div></li>
+<li><b>Vertical equilibrium</b> &nbsp;Σ F<sub>y</sub> = 0:
+<div class="formula">V<sub>A</sub> + V<sub>C</sub> − 50 = 0   ⇒   V<sub>A</sub> = 25 kN  (↑)</div></li>
+</ol>
 <div class="answer">
-V<sub>A</sub> = 25 kN (↑) &nbsp; V<sub>C</sub> = 25 kN (↑) &nbsp; H<sub>C</sub> = 0
+V<sub>A</sub> = 25 kN (↑) &nbsp;&nbsp; V<sub>C</sub> = 25 kN (↑) &nbsp;&nbsp; H<sub>C</sub> = 0
 </div>
-<div class="note">Symmetric UDL on simply supported beam ⇒ each support takes qL/2 = 25 kN. ✓</div>
-</div>
-</div>
+<div class="note"><b>Symmetry check:</b> a symmetric load on a symmetric beam splits equally — each support carries qL/2 = 25 kN. ✓</div>
 </div>
 
 
 <!-- ============ (f) ============ -->
 <div class="sub">
-<div class="sub-title">(f) Simply supported beam · UDL q = 10 kN/m on left half (0 → 5 m), total span 10 m</div>
+<div class="sub-title">(f) Simply supported beam · UDL q = 10 kN/m on the left half (0 → 5 m) · L = 10 m</div>
 <div class="row">
 <div class="col-left">
-<svg viewBox="0 0 380 200">
+<h4>Given structure</h4>
+<svg viewBox="0 0 400 210">
   <pattern id="gf" patternUnits="userSpaceOnUse" width="6" height="6" patternTransform="rotate(45)">
     <line x1="0" y1="0" x2="0" y2="6" stroke="#888" stroke-width="1"/>
   </pattern>
-  <line x1="40" y1="90" x2="340" y2="90" stroke="#222" stroke-width="3"/>
-  <!-- udl on left half (x = 40 to 190) -->
+  <line x1="60" y1="95" x2="360" y2="95" stroke="#222" stroke-width="3"/>
   <g stroke="#c62828" stroke-width="1.5" fill="#c62828">
-    <line x1="40" y1="50" x2="190" y2="50"/>
-    <line x1="55" y1="50" x2="55" y2="86"/><polygon points="55,90 51,82 59,82"/>
-    <line x1="85" y1="50" x2="85" y2="86"/><polygon points="85,90 81,82 89,82"/>
-    <line x1="115" y1="50" x2="115" y2="86"/><polygon points="115,90 111,82 119,82"/>
-    <line x1="145" y1="50" x2="145" y2="86"/><polygon points="145,90 141,82 149,82"/>
-    <line x1="175" y1="50" x2="175" y2="86"/><polygon points="175,90 171,82 179,82"/>
+    <line x1="60" y1="52" x2="210" y2="52"/>
+    <line x1="75" y1="52" x2="75" y2="91"/><polygon points="75,95 71,86 79,86"/>
+    <line x1="105" y1="52" x2="105" y2="91"/><polygon points="105,95 101,86 109,86"/>
+    <line x1="135" y1="52" x2="135" y2="91"/><polygon points="135,95 131,86 139,86"/>
+    <line x1="165" y1="52" x2="165" y2="91"/><polygon points="165,95 161,86 169,86"/>
+    <line x1="195" y1="52" x2="195" y2="91"/><polygon points="195,95 191,86 199,86"/>
   </g>
-  <text x="80" y="42" font-size="13" fill="#c62828" font-weight="600">10 kN/m</text>
-  <polygon points="40,90 30,106 50,106" fill="#fff" stroke="#222" stroke-width="1.5"/>
-  <circle cx="34" cy="111" r="3" fill="#fff" stroke="#222"/>
-  <circle cx="40" cy="111" r="3" fill="#fff" stroke="#222"/>
-  <circle cx="46" cy="111" r="3" fill="#fff" stroke="#222"/>
-  <rect x="24" y="115" width="32" height="6" fill="url(#gf)" stroke="#666"/>
-  <polygon points="340,90 330,108 350,108" fill="#fff" stroke="#222" stroke-width="1.5"/>
-  <rect x="324" y="108" width="32" height="6" fill="url(#gf)" stroke="#666"/>
-  <text x="34" y="82" font-size="12">A</text>
-  <text x="346" y="82" font-size="12">C</text>
-  <line x1="40" y1="140" x2="190" y2="140" stroke="#444"/>
-  <line x1="40" y1="135" x2="40" y2="145" stroke="#444"/>
-  <line x1="190" y1="135" x2="190" y2="145" stroke="#444"/>
-  <text x="115" y="155" font-size="12" text-anchor="middle">5.00 m</text>
-  <line x1="40" y1="170" x2="340" y2="170" stroke="#444"/>
-  <line x1="40" y1="165" x2="40" y2="175" stroke="#444"/>
-  <line x1="340" y1="165" x2="340" y2="175" stroke="#444"/>
-  <text x="190" y="185" font-size="12" text-anchor="middle">10.00 m</text>
+  <text x="135" y="44" font-size="13" fill="#c62828" font-weight="600" text-anchor="middle">q = 10 kN/m</text>
+  <polygon points="60,95 50,111 70,111" fill="#fff" stroke="#222" stroke-width="1.5"/>
+  <circle cx="54" cy="116" r="3" fill="#fff" stroke="#222"/>
+  <circle cx="60" cy="116" r="3" fill="#fff" stroke="#222"/>
+  <circle cx="66" cy="116" r="3" fill="#fff" stroke="#222"/>
+  <rect x="44" y="120" width="32" height="6" fill="url(#gf)" stroke="#666"/>
+  <polygon points="360,95 350,113 370,113" fill="#fff" stroke="#222" stroke-width="1.5"/>
+  <rect x="344" y="113" width="32" height="6" fill="url(#gf)" stroke="#666"/>
+  <text x="54" y="89" font-size="12" text-anchor="end" font-weight="600">A</text>
+  <text x="372" y="89" font-size="12" font-weight="600">C</text>
+  <line x1="60" y1="150" x2="210" y2="150" stroke="#444"/>
+  <line x1="60" y1="145" x2="60" y2="155" stroke="#444"/>
+  <line x1="210" y1="145" x2="210" y2="155" stroke="#444"/>
+  <text x="135" y="165" font-size="12" text-anchor="middle">5.00 m</text>
+  <line x1="60" y1="180" x2="360" y2="180" stroke="#444"/>
+  <line x1="60" y1="175" x2="60" y2="185" stroke="#444"/>
+  <line x1="360" y1="175" x2="360" y2="185" stroke="#444"/>
+  <text x="210" y="195" font-size="12" text-anchor="middle">10.00 m</text>
 </svg>
 </div>
 <div class="col-right">
-<h4>FBD &amp; Equilibrium</h4>
-<div class="formula">Resultant of UDL:
-   R = 10 · 5 = 50 kN, at the centroid x = 2.5 m from A.
-
-Σ F<sub>x</sub> = 0:   H<sub>C</sub> = 0
-
-Σ M<sub>A</sub> = 0:
-   V<sub>C</sub>·(10) − 50·(2.5) = 0
-   ⇒  V<sub>C</sub> = 125/10 = 12.5 kN ↑
-
-Σ F<sub>y</sub> = 0:
-   V<sub>A</sub> + V<sub>C</sub> − 50 = 0
-   ⇒  V<sub>A</sub> = 37.5 kN ↑</div>
+<h4>FBD — distributed load → its resultant</h4>
+<svg viewBox="0 0 400 210">
+  <line x1="60" y1="95" x2="360" y2="95" stroke="#222" stroke-width="3"/>
+  <line x1="135" y1="44" x2="135" y2="91" stroke="#6a1b9a" stroke-width="2.5" stroke-dasharray="5,3"/>
+  <polygon points="135,95 129,84 141,84" fill="#6a1b9a"/>
+  <text x="135" y="36" font-size="12" fill="#6a1b9a" font-weight="700" text-anchor="middle">R = q·a = 50 kN</text>
+  <line x1="60" y1="120" x2="135" y2="120" stroke="#6a1b9a" stroke-dasharray="3,3"/>
+  <line x1="60" y1="116" x2="60" y2="124" stroke="#6a1b9a"/>
+  <line x1="135" y1="116" x2="135" y2="124" stroke="#6a1b9a"/>
+  <text x="97" y="134" font-size="11" fill="#6a1b9a" text-anchor="middle">2.5 m</text>
+  <line x1="60" y1="160" x2="60" y2="102" stroke="#1565c0" stroke-width="2.5"/>
+  <polygon points="60,95 54,107 66,107" fill="#1565c0"/>
+  <text x="66" y="154" font-size="13" fill="#1565c0" font-weight="700">V<tspan font-size="9" dy="3">A</tspan></text>
+  <line x1="360" y1="160" x2="360" y2="102" stroke="#1565c0" stroke-width="2.5"/>
+  <polygon points="360,95 354,107 366,107" fill="#1565c0"/>
+  <text x="366" y="154" font-size="13" fill="#1565c0" font-weight="700">V<tspan font-size="9" dy="3">C</tspan></text>
+  <line x1="360" y1="78" x2="388" y2="78" stroke="#1565c0" stroke-width="2.5"/>
+  <polygon points="392,78 381,73 381,83" fill="#1565c0"/>
+  <text x="362" y="72" font-size="13" fill="#1565c0" font-weight="700">H<tspan font-size="9" dy="3">C</tspan></text>
+  <text x="54" y="89" font-size="12" text-anchor="end" font-weight="600">A</text>
+  <text x="354" y="113" font-size="12" text-anchor="end" font-weight="600">C</text>
+</svg>
+<div class="fbd-legend">
+  <span><i style="border-color:#c62828"></i>applied load</span>
+  <span><i style="border-color:#6a1b9a"></i>resultant of UDL</span>
+  <span><i style="border-color:#1565c0"></i>support reaction</span>
+</div>
+</div>
+</div>
+<h4>Step-by-step solution</h4>
+<ol class="steps detailed">
+<li><b>Replace the distributed load.</b> The UDL acts only on the left 5 m. Its resultant equals the area of the load rectangle, placed at that rectangle's centroid:
+<div class="formula">R = q · a = 10 · 5 = 50 kN,   acting at x = a/2 = 2.5 m from A</div></li>
+<li><b>Count the reactions.</b> A = roller ⇒ V<sub>A</sub>; C = pin ⇒ V<sub>C</sub> + H<sub>C</sub>. 3 unknowns ⇒ determinate.</li>
+<li><b>Horizontal equilibrium</b> &nbsp;Σ F<sub>x</sub> = 0:
+<div class="formula">H<sub>C</sub> = 0</div></li>
+<li><b>Moment about A</b> &nbsp;Σ M<sub>A</sub> = 0&nbsp; (CCW positive). The resultant sits 2.5 m from A, V<sub>C</sub> sits 10 m from A:
+<div class="formula">V<sub>C</sub>·(10) − 50·(2.5) = 0   ⇒   V<sub>C</sub> = 125 / 10 = 12.5 kN  (↑)</div></li>
+<li><b>Vertical equilibrium</b> &nbsp;Σ F<sub>y</sub> = 0:
+<div class="formula">V<sub>A</sub> + V<sub>C</sub> − 50 = 0   ⇒   V<sub>A</sub> = 37.5 kN  (↑)</div></li>
+</ol>
 <div class="answer">
-V<sub>A</sub> = 37.5 kN (↑) &nbsp; V<sub>C</sub> = 12.5 kN (↑) &nbsp; H<sub>C</sub> = 0
+V<sub>A</sub> = 37.5 kN (↑) &nbsp;&nbsp; V<sub>C</sub> = 12.5 kN (↑) &nbsp;&nbsp; H<sub>C</sub> = 0
 </div>
-<div class="note">Load is concentrated on the left side ⇒ left support carries the larger share (3 : 1).</div>
-</div>
-</div>
+<div class="note"><b>Intuition:</b> the load sits closer to A, so A carries the larger share. The resultant is 2.5 m from A and 7.5 m from C ⇒ the reactions split in the inverse ratio 7.5 : 2.5 = 3 : 1, i.e. 37.5 vs 12.5 kN. ✓</div>
 </div>
 
 
