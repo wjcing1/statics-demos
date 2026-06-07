@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DSI Quick Reference — 097430 Statics</title>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  background: #fafafa; color: #222;
+  max-width: 860px; margin: 0 auto;
+  padding: 32px 24px 64px;
+  line-height: 1.6;
+}
+h1 { font-size: 26px; color: #1a3a8f; margin-bottom: 4px; }
+.subtitle { font-size: 13px; color: #888; margin-bottom: 28px; }
+h2 {
+  font-size: 18px; color: #1a3a8f;
+  border-bottom: 2px solid #1a3a8f;
+  padding-bottom: 4px; margin: 32px 0 16px;
+}
+h2.orange { color: #e65100; border-color: #e65100; }
+h2.red { color: #c62828; border-color: #c62828; }
+h2.purple { color: #6a1b9a; border-color: #6a1b9a; }
+
+table {
+  width: 100%; border-collapse: collapse;
+  font-size: 14px; margin: 12px 0 20px;
+}
+th, td {
+  border: 1px solid #ddd; padding: 10px 12px;
+  text-align: center; vertical-align: middle;
+}
+th { background: #1a3a8f; color: white; font-weight: 600; font-size: 13px; }
+th.orange { background: #e65100; }
+th.red { background: #c62828; }
+th.purple { background: #6a1b9a; }
+tbody tr:nth-child(even) { background: #f5f7fb; }
+td.left { text-align: left; }
+td.name { text-align: left; font-weight: 600; }
+
+.formula-box {
+  background: #eef2ff; border: 2px solid #1a3a8f;
+  border-radius: 8px; padding: 16px 20px;
+  margin: 16px 0; font-size: 16px; text-align: center;
+}
+.formula-box .main { font-size: 22px; font-weight: 700; color: #1a3a8f; }
+.formula-box .sub { font-size: 13px; color: #555; margin-top: 4px; }
+
+.warning {
+  background: #fff8e1; border-left: 4px solid #ffa000;
+  padding: 12px 16px; margin: 16px 0;
+  font-size: 14px; border-radius: 0 6px 6px 0;
+}
+.warning strong { color: #e65100; }
+
+.source { font-size: 12px; color: #999; margin-top: 4px; }
+
+svg.support-icon { vertical-align: middle; }
+
+.example-box {
+  background: white; border: 1px solid #ddd;
+  border-radius: 8px; padding: 16px 20px; margin: 12px 0;
+}
+.example-box .label { font-size: 12px; color: #888; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 8px; }
+
+.dsi-table td.result { font-weight: 700; }
+.dsi-table td.hypo { color: #c62828; }
+.dsi-table td.iso { color: #2e7d32; }
+.dsi-table td.hyper { color: #e65100; }
+</style>
+</head>
+<body>
+
+<h1>DSI Quick Reference</h1>
+<p class="subtitle">097430 Statics — Degree of Static Indeterminacy<br>Sources: Class 3 (slide 16–17) + Class 5 (slides 7–15)</p>
+
+<!-- ====== SECTION 1: EXTERNAL SUPPORTS ====== -->
+<h2>1. External Supports — how to count r</h2>
+
+<div class="formula-box">
+  <div class="main">ED = r − 3</div>
+  <div class="sub">r = total number of reaction components from all supports (in 2D, DOFs = 3)</div>
+</div>
+
+<table>
+  <thead>
+    <tr>
+      <th style="width:160px">Support</th>
+      <th style="width:120px">Symbol</th>
+      <th style="width:60px">r</th>
+      <th style="width:100px">Reactions</th>
+      <th>Allowed movement</th>
+    </tr>
+  </thead>
+  <tbody>
+    <!-- Roller -->
+    <tr>
+      <td class="name">Roller<br><span style="font-weight:400;font-size:12px;color:#888">(simple / carrello)</span></td>
+      <td>
+        <svg width="80" height="50" viewBox="0 0 80 50">
+          <!-- beam -->
+          <line x1="10" y1="15" x2="70" y2="15" stroke="#222" stroke-width="2"/>
+          <!-- triangle -->
+          <polygon points="40,15 30,35 50,35" fill="none" stroke="#222" stroke-width="1.8"/>
+          <!-- circles -->
+          <circle cx="33" cy="38" r="3" fill="none" stroke="#222" stroke-width="1.2"/>
+          <circle cx="47" cy="38" r="3" fill="none" stroke="#222" stroke-width="1.2"/>
+          <!-- ground -->
+          <line x1="25" y1="41" x2="55" y2="41" stroke="#222" stroke-width="1.5"/>
+        </svg>
+      </td>
+      <td><strong>1</strong></td>
+      <td>V</td>
+      <td class="left">Horizontal displacement + rotation</td>
+    </tr>
+    <!-- Pin -->
+    <tr>
+      <td class="name">Pinned<br><span style="font-weight:400;font-size:12px;color:#888">(double / cerniera)</span></td>
+      <td>
+        <svg width="80" height="55" viewBox="0 0 80 55">
+          <!-- beam -->
+          <line x1="10" y1="15" x2="70" y2="15" stroke="#222" stroke-width="2"/>
+          <!-- triangle -->
+          <polygon points="40,15 28,38 52,38" fill="none" stroke="#222" stroke-width="1.8"/>
+          <!-- hatching ground -->
+          <line x1="22" y1="38" x2="58" y2="38" stroke="#222" stroke-width="1.5"/>
+          <line x1="24" y1="38" x2="20" y2="44" stroke="#222" stroke-width="1"/>
+          <line x1="30" y1="38" x2="26" y2="44" stroke="#222" stroke-width="1"/>
+          <line x1="36" y1="38" x2="32" y2="44" stroke="#222" stroke-width="1"/>
+          <line x1="42" y1="38" x2="38" y2="44" stroke="#222" stroke-width="1"/>
+          <line x1="48" y1="38" x2="44" y2="44" stroke="#222" stroke-width="1"/>
+          <line x1="54" y1="38" x2="50" y2="44" stroke="#222" stroke-width="1"/>
+        </svg>
+      </td>
+      <td><strong>2</strong></td>
+      <td>H, V</td>
+      <td class="left">Rotation only</td>
+    </tr>
+    <!-- Fixed -->
+    <tr>
+      <td class="name">Fixed<br><span style="font-weight:400;font-size:12px;color:#888">(clamped / incastro)</span></td>
+      <td>
+        <svg width="80" height="50" viewBox="0 0 80 50">
+          <!-- wall hatching -->
+          <line x1="20" y1="5" x2="20" y2="45" stroke="#222" stroke-width="2"/>
+          <line x1="20" y1="8" x2="12" y2="14" stroke="#222" stroke-width="1"/>
+          <line x1="20" y1="14" x2="12" y2="20" stroke="#222" stroke-width="1"/>
+          <line x1="20" y1="20" x2="12" y2="26" stroke="#222" stroke-width="1"/>
+          <line x1="20" y1="26" x2="12" y2="32" stroke="#222" stroke-width="1"/>
+          <line x1="20" y1="32" x2="12" y2="38" stroke="#222" stroke-width="1"/>
+          <line x1="20" y1="38" x2="12" y2="44" stroke="#222" stroke-width="1"/>
+          <!-- beam -->
+          <line x1="20" y1="25" x2="72" y2="25" stroke="#222" stroke-width="2"/>
+        </svg>
+      </td>
+      <td><strong>3</strong></td>
+      <td>H, V, M</td>
+      <td class="left">None (fully restrained)</td>
+    </tr>
+    <!-- Slider (fixed with roller) -->
+    <tr>
+      <td class="name">Slider<br><span style="font-weight:400;font-size:12px;color:#888">(fixed with roller)</span></td>
+      <td>
+        <svg width="80" height="55" viewBox="0 0 80 55">
+          <!-- wall hatching -->
+          <line x1="20" y1="5" x2="20" y2="45" stroke="#222" stroke-width="2"/>
+          <line x1="20" y1="8" x2="12" y2="14" stroke="#222" stroke-width="1"/>
+          <line x1="20" y1="14" x2="12" y2="20" stroke="#222" stroke-width="1"/>
+          <line x1="20" y1="20" x2="12" y2="26" stroke="#222" stroke-width="1"/>
+          <line x1="20" y1="26" x2="12" y2="32" stroke="#222" stroke-width="1"/>
+          <line x1="20" y1="32" x2="12" y2="38" stroke="#222" stroke-width="1"/>
+          <line x1="20" y1="38" x2="12" y2="44" stroke="#222" stroke-width="1"/>
+          <!-- roller circles between wall and beam -->
+          <circle cx="26" cy="16" r="3" fill="none" stroke="#222" stroke-width="1.2"/>
+          <circle cx="26" cy="25" r="3" fill="none" stroke="#222" stroke-width="1.2"/>
+          <circle cx="26" cy="34" r="3" fill="none" stroke="#222" stroke-width="1.2"/>
+          <!-- beam (vertical, can slide) -->
+          <line x1="29" y1="5" x2="29" y2="45" stroke="#222" stroke-width="2"/>
+          <!-- horizontal beam -->
+          <line x1="29" y1="25" x2="72" y2="25" stroke="#222" stroke-width="2"/>
+        </svg>
+      </td>
+      <td><strong>2</strong></td>
+      <td>V, M</td>
+      <td class="left">Horizontal displacement</td>
+    </tr>
+    <!-- Double pendulum -->
+    <tr>
+      <td class="name">Double pendulum<br><span style="font-weight:400;font-size:12px;color:#888">(pendolo doppio)</span></td>
+      <td>
+        <svg width="80" height="55" viewBox="0 0 80 55">
+          <!-- beam -->
+          <line x1="10" y1="10" x2="70" y2="10" stroke="#222" stroke-width="2"/>
+          <!-- pendulum bar -->
+          <line x1="40" y1="10" x2="40" y2="40" stroke="#222" stroke-width="1.8"/>
+          <!-- top hinge -->
+          <circle cx="40" cy="10" r="3" fill="white" stroke="#222" stroke-width="1.5"/>
+          <!-- bottom hinge -->
+          <circle cx="40" cy="40" r="3" fill="white" stroke="#222" stroke-width="1.5"/>
+          <!-- ground -->
+          <line x1="30" y1="43" x2="50" y2="43" stroke="#222" stroke-width="1.5"/>
+          <line x1="32" y1="43" x2="28" y2="49" stroke="#222" stroke-width="1"/>
+          <line x1="37" y1="43" x2="33" y2="49" stroke="#222" stroke-width="1"/>
+          <line x1="42" y1="43" x2="38" y2="49" stroke="#222" stroke-width="1"/>
+          <line x1="47" y1="43" x2="43" y2="49" stroke="#222" stroke-width="1"/>
+        </svg>
+      </td>
+      <td><strong>1</strong></td>
+      <td>Along bar</td>
+      <td class="left">Perpendicular displacement + rotation</td>
+    </tr>
+  </tbody>
+</table>
+<p class="source">Source: Class 3, slides 16–17</p>
+
+<!-- ====== SECTION 2: INTERNAL DEGREE ====== -->
+<h2 class="orange">2. Internal Degree (ID)</h2>
+
+<p style="margin-bottom:12px;">Start from a <strong>tree-alike</strong> structure (continuous, no closed parts, no releases) → <strong>ID = 0</strong></p>
+
+<table>
+  <thead>
+    <tr>
+      <th class="orange" style="width:180px">Feature</th>
+      <th class="orange" style="width:80px">Symbol</th>
+      <th class="orange" style="width:80px">Effect on ID</th>
+      <th class="orange">Explanation</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td class="name">Closed branch<br><span style="font-weight:400;font-size:12px;color:#888">(closed loop)</span></td>
+      <td>
+        <svg width="60" height="45" viewBox="0 0 60 45">
+          <rect x="10" y="5" width="40" height="30" fill="none" stroke="#e65100" stroke-width="2" rx="2"/>
+          <text x="30" y="25" text-anchor="middle" font-size="14" font-weight="700" fill="#e65100">+3</text>
+        </svg>
+      </td>
+      <td><strong style="color:#e65100">+3</strong></td>
+      <td class="left">Each closed loop adds 3 redundant internal forces (N, V, M)</td>
+    </tr>
+    <tr>
+      <td class="name">Internal hinge<br><span style="font-weight:400;font-size:12px;color:#888">(releases M = 0)</span></td>
+      <td>
+        <svg width="60" height="35" viewBox="0 0 60 35">
+          <line x1="5" y1="18" x2="25" y2="18" stroke="#222" stroke-width="2"/>
+          <line x1="35" y1="18" x2="55" y2="18" stroke="#222" stroke-width="2"/>
+          <circle cx="30" cy="18" r="5" fill="white" stroke="#1a3a8f" stroke-width="2"/>
+        </svg>
+      </td>
+      <td><strong style="color:#1a3a8f">−(n − 1)</strong></td>
+      <td class="left">n = number of bars meeting at the hinge. Releases moment.</td>
+    </tr>
+    <tr>
+      <td class="name">Axial release<br><span style="font-weight:400;font-size:12px;color:#888">(releases N = 0)</span></td>
+      <td>
+        <svg width="60" height="35" viewBox="0 0 60 35">
+          <line x1="5" y1="18" x2="22" y2="18" stroke="#222" stroke-width="2"/>
+          <line x1="38" y1="18" x2="55" y2="18" stroke="#222" stroke-width="2"/>
+          <!-- double arrow indicating sliding -->
+          <line x1="24" y1="12" x2="24" y2="24" stroke="#1a3a8f" stroke-width="1.5"/>
+          <line x1="36" y1="12" x2="36" y2="24" stroke="#1a3a8f" stroke-width="1.5"/>
+          <line x1="24" y1="18" x2="36" y2="18" stroke="#1a3a8f" stroke-width="1" stroke-dasharray="2,2"/>
+        </svg>
+      </td>
+      <td><strong style="color:#1a3a8f">−(n − 1)</strong></td>
+      <td class="left">n = number of bars at the release. Releases axial force.</td>
+    </tr>
+  </tbody>
+</table>
+<p class="source">Source: Class 5, slides 9–11</p>
+
+<!-- ====== SECTION 3: DSI FORMULA ====== -->
+<h2 class="red">3. DSI = ED + ID</h2>
+
+<div class="formula-box" style="border-color:#c62828;">
+  <div class="main" style="color:#c62828;">DSI = ED + ID = (r − 3) + ID</div>
+</div>
+
+<table class="dsi-table">
+  <thead>
+    <tr>
+      <th class="red" style="width:100px">DSI</th>
+      <th class="red" style="width:150px">Classification</th>
+      <th class="red">Meaning</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td class="result hypo">&lt; 0</td>
+      <td class="result hypo">Hypostatic</td>
+      <td class="left">Mechanism — structure can move. <strong>Draw the failure mechanism!</strong></td>
+    </tr>
+    <tr>
+      <td class="result iso">= 0</td>
+      <td class="result iso">Isostatic</td>
+      <td class="left">Statically determined — solvable with equilibrium equations only.</td>
+    </tr>
+    <tr>
+      <td class="result hyper">&gt; 0</td>
+      <td class="result hyper">Hyperstatic</td>
+      <td class="left">Statically indeterminate — has redundant constraints. (Not solvable in this course.)</td>
+    </tr>
+  </tbody>
+</table>
+
+<!-- ====== SECTION 4: TRAPS ====== -->
+<div class="warning" style="margin-top:28px;">
+  <strong>CAREFUL — formula can lie!</strong> (Class 5, slides 8 + 12)<br><br>
+  Even if DSI ≥ 0, the structure is still <strong>hypostatic</strong> if:<br>
+  &bull; All reactions are <strong>parallel</strong> (e.g. all rollers in the same direction)<br>
+  &bull; All reactions are <strong>concurrent</strong> in one point<br><br>
+  In these cases → the structure is a <strong>mechanism</strong> regardless of what the formula says. Always check!
+</div>
+
+<!-- ====== SECTION 6: WORKED EXAMPLE ====== -->
+<h2>4. Worked example</h2>
+
+<div class="example-box">
+  <div class="label">Example from Class 5, slide 13 + 15</div>
+  <svg width="340" height="160" viewBox="0 0 340 160">
+    <!-- left fixed support -->
+    <line x1="30" y1="20" x2="30" y2="120" stroke="#222" stroke-width="2"/>
+    <line x1="30" y1="25" x2="22" y2="33" stroke="#222" stroke-width="1"/>
+    <line x1="30" y1="35" x2="22" y2="43" stroke="#222" stroke-width="1"/>
+    <line x1="30" y1="45" x2="22" y2="53" stroke="#222" stroke-width="1"/>
+    <line x1="30" y1="55" x2="22" y2="63" stroke="#222" stroke-width="1"/>
+    <line x1="30" y1="65" x2="22" y2="73" stroke="#222" stroke-width="1"/>
+    <line x1="30" y1="75" x2="22" y2="83" stroke="#222" stroke-width="1"/>
+    <line x1="30" y1="85" x2="22" y2="93" stroke="#222" stroke-width="1"/>
+    <line x1="30" y1="95" x2="22" y2="103" stroke="#222" stroke-width="1"/>
+    <line x1="30" y1="105" x2="22" y2="113" stroke="#222" stroke-width="1"/>
+    <!-- vertical left bar -->
+    <line x1="30" y1="70" x2="80" y2="70" stroke="#222" stroke-width="2"/>
+    <!-- horizontal bar -->
+    <line x1="80" y1="70" x2="80" y2="30" stroke="#222" stroke-width="2"/>
+    <!-- top horizontal -->
+    <line x1="80" y1="30" x2="200" y2="30" stroke="#222" stroke-width="2"/>
+    <!-- internal hinge -->
+    <circle cx="200" cy="30" r="5" fill="white" stroke="#1a3a8f" stroke-width="2"/>
+    <!-- right part -->
+    <line x1="205" y1="30" x2="260" y2="30" stroke="#222" stroke-width="2"/>
+    <!-- right down -->
+    <line x1="260" y1="30" x2="260" y2="110" stroke="#222" stroke-width="2"/>
+    <!-- right pin support -->
+    <polygon points="260,110 250,130 270,130" fill="none" stroke="#222" stroke-width="1.8"/>
+    <line x1="245" y1="130" x2="275" y2="130" stroke="#222" stroke-width="1.5"/>
+    <line x1="248" y1="130" x2="244" y2="136" stroke="#222" stroke-width="1"/>
+    <line x1="254" y1="130" x2="250" y2="136" stroke="#222" stroke-width="1"/>
+    <line x1="260" y1="130" x2="256" y2="136" stroke="#222" stroke-width="1"/>
+    <line x1="266" y1="130" x2="262" y2="136" stroke="#222" stroke-width="1"/>
+    <line x1="272" y1="130" x2="268" y2="136" stroke="#222" stroke-width="1"/>
+    <!-- load -->
+    <line x1="150" y1="5" x2="150" y2="28" stroke="#c62828" stroke-width="1.8"/>
+    <polygon points="150,30 146,22 154,22" fill="#c62828"/>
+    <text x="158" y="14" font-size="13" fill="#c62828">10kN</text>
+    <!-- labels -->
+    <text x="25" y="145" font-size="11" fill="#888">A (fixed, r=3)</text>
+    <text x="238" y="145" font-size="11" fill="#888">B (pin, r=2)</text>
+    <text x="200" y="20" font-size="11" fill="#1a3a8f" text-anchor="middle">hinge</text>
+  </svg>
+
+  <div style="display:flex; gap:24px; flex-wrap:wrap; margin-top:12px;">
+    <div style="flex:1; min-width:200px;">
+      <strong>Strategy 1:</strong><br>
+      ED = r − 3 = (3 + 2) − 3 = <strong>+2</strong> (externally hyperstatic)<br>
+      Closed branches: 0 → starts at +0<br>
+      Internal hinges: 1 hinge, 2 bars → −(2−1) = <strong>−1</strong><br>
+      ID = 0 − 1 = <strong>−1</strong> (internally hypostatic)<br>
+      <strong style="color:#2e7d32;">DSI = +2 + (−1) = +1 → check: wait...</strong>
+    </div>
+    <div style="flex:1; min-width:200px;">
+      <strong>Strategy 2:</strong><br>
+      Bars: 1 rigid body → DOFs = 1 × 3 = 3... <br>
+      <em style="font-size:13px; color:#888;">Actually this structure has 2 bars (split by hinge)</em><br>
+      DOFs = 2 × 3 = <strong>6</strong><br>
+      DOCs = 3(fixed) + 2(pin) + 2(hinge) = <strong>7</strong>... <br>
+    </div>
+  </div>
+  <p style="margin-top:12px; font-size:13px; color:#888;">
+    See Class 5 slide 13 and 15 for the complete worked-out version with correct counting.
+  </p>
+</div>
+
+<p style="margin-top:32px; font-size:12px; color:#bbb; text-align:center;">
+  097430 Statics — DSI Quick Reference — compiled from Class 3 + Class 5 lecture slides
+</p>
+
+</body>
+</html>
