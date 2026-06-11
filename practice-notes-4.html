@@ -1,0 +1,1098 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Statics 097430 — Practice Notes 4 Solutions (Trusses)</title>
+<style>
+* { box-sizing: border-box; }
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", sans-serif;
+  margin: 0; padding: 24px;
+  background: #fafafa; color: #222;
+  max-width: 1100px; margin-left: auto; margin-right: auto;
+  line-height: 1.6;
+}
+h1 { font-size: 26px; margin: 0 0 6px; }
+h2 { font-size: 21px; margin: 0 0 14px; color: #1a1a1a; border-bottom: 2px solid #2a6df4; padding-bottom: 6px;}
+h3 { font-size: 17px; margin: 18px 0 10px; color: #2a6df4; }
+h4 { font-size: 15px; margin: 14px 0 6px; color: #444; }
+.subtitle { color: #666; font-size: 14px; margin-bottom: 22px; }
+nav { margin-bottom: 22px; }
+nav a {
+  display: inline-block; padding: 6px 14px;
+  background: #fff; border: 1px solid #ddd; color: #333;
+  text-decoration: none; margin-right: 8px;
+  border-radius: 4px; font-size: 14px;
+}
+nav a:hover { background: #f0f0f0; }
+section {
+  background: white; border: 1px solid #e3e3e3;
+  border-radius: 8px; padding: 24px;
+  margin-bottom: 22px;
+}
+.sub {
+  background: #fbfbfb; border: 1px solid #eee; border-radius: 6px;
+  padding: 16px 18px; margin: 14px 0;
+}
+.sub-title {
+  font-weight: 600; font-size: 16px; color: #c62828;
+  margin-bottom: 8px;
+}
+.row {
+  display: flex; gap: 22px;
+  align-items: flex-start; flex-wrap: wrap;
+}
+.col-left  { flex: 1; min-width: 320px; }
+.col-right { flex: 1.2; min-width: 320px; }
+svg {
+  width: 100%; height: auto;
+  background: #fdfdfd;
+  border: 1px solid #eee; border-radius: 4px;
+  display: block;
+}
+.formula {
+  font-family: "SF Mono", Consolas, Menlo, monospace;
+  background: #f5f5f5; padding: 10px 14px;
+  border-radius: 4px; margin: 6px 0;
+  font-size: 13px; line-height: 1.8;
+  white-space: pre-wrap;
+}
+.answer {
+  background: #e8f5e9; color: #1b5e20;
+  padding: 12px 14px; border-radius: 4px;
+  font-weight: 500; margin: 10px 0;
+  font-size: 14px; line-height: 1.8;
+  border-left: 4px solid #2e7d32;
+}
+.note {
+  font-size: 13px; color: #555;
+  background: #f9f9f9; padding: 10px 14px;
+  border-radius: 4px; border-left: 3px solid #999;
+  margin: 12px 0;
+}
+.warn {
+  background: #fff8e1; border-left: 4px solid #ffa000;
+  padding: 10px 14px; margin: 10px 0;
+  font-size: 13px;
+}
+.err {
+  background: #fdecea; border-left: 4px solid #c62828;
+  padding: 10px 14px; margin: 10px 0;
+  font-size: 13px;
+}
+footer {
+  text-align: center; color: #999;
+  font-size: 12px; margin-top: 24px;
+}
+.tag {
+  display: inline-block; padding: 2px 8px;
+  background: #2a6df4; color: white; border-radius: 12px;
+  font-size: 11px; margin-right: 6px;
+}
+table.summary {
+  border-collapse: collapse; width: 100%;
+  margin: 10px 0; font-size: 14px;
+}
+table.summary th, table.summary td {
+  border: 1px solid #ddd; padding: 8px 10px; text-align: center;
+}
+table.summary th { background: #f0f4ff; }
+.steps li { margin-bottom: 6px; }
+.steps.detailed { margin: 8px 0 0; padding-left: 22px; }
+.steps.detailed > li { margin-bottom: 13px; line-height: 1.55; }
+.steps.detailed > li > b { color: #1a1a1a; }
+.steps.detailed .formula { margin: 7px 0 0; }
+.fbd-legend { display: flex; gap: 18px; flex-wrap: wrap; font-size: 12px; margin: 10px 0 0; color: #444; }
+.fbd-legend span { display: inline-flex; align-items: center; gap: 6px; }
+.fbd-legend i { width: 18px; height: 0; border-top: 3px solid; display: inline-block; }
+.col-left h4, .col-right h4 { margin-top: 0; }
+.tension { color: #2e7d32; font-weight: 600; }
+.compression { color: #c62828; font-weight: 600; }
+</style>
+</head>
+<body>
+
+<h1>Practical Notes 4 — Solutions</h1>
+<div class="subtitle">097430 Statics · Articulated (truss) structures · Problem 4.3 (Ritter) &amp; Problem 4.4 (joints vs Ritter)</div>
+
+<nav>
+  <a href="#p43">Problem 4.3 — Roof truss, Ritter's method</a>
+  <a href="#p44">Problem 4.4 — Square truss, joints + Ritter</a>
+</nav>
+
+<div class="note">
+<strong>Sign convention (used everywhere below):</strong> every unknown bar force is drawn
+<b>assuming tension</b> — the cut bar <em>pulls</em> the free body toward the far node.
+A positive result ⇒ <span class="tension">tension (+)</span>; a negative result ⇒
+<span class="compression">compression (−)</span>. You never need to guess the sense in advance.
+</div>
+
+<!-- ================== PROBLEM 4.3 ================== -->
+<section id="p43">
+<h2>Problem 4.3 — Roof truss · all bar forces by Ritter's method</h2>
+
+<div class="row">
+<div class="col-left">
+<h4>Given structure</h4>
+<svg viewBox="0 0 430 215">
+  <pattern id="g43" patternUnits="userSpaceOnUse" width="6" height="6" patternTransform="rotate(45)">
+    <line x1="0" y1="0" x2="0" y2="6" stroke="#888" stroke-width="1"/>
+  </pattern>
+  <!-- bars -->
+  <g stroke="#222" stroke-width="2" fill="none">
+    <line x1="50" y1="158" x2="350" y2="158"/>            <!-- bottom chord A-B -->
+    <line x1="50" y1="158" x2="200" y2="83"/>             <!-- rafter A-F-H -->
+    <line x1="200" y1="83" x2="350" y2="158"/>            <!-- rafter H-G-B -->
+    <line x1="125" y1="158" x2="125" y2="120"/>           <!-- C-F -->
+    <line x1="200" y1="158" x2="200" y2="83"/>            <!-- D-H -->
+    <line x1="275" y1="158" x2="275" y2="120"/>           <!-- E-G -->
+    <line x1="125" y1="120" x2="200" y2="158"/>           <!-- F-D -->
+    <line x1="200" y1="158" x2="275" y2="120"/>           <!-- D-G -->
+  </g>
+  <!-- loads -->
+  <line x1="125" y1="75" x2="125" y2="114" stroke="#c62828" stroke-width="2"/>
+  <polygon points="125,119 120,109 130,109" fill="#c62828"/>
+  <text x="118" y="95" font-size="12" fill="#c62828" font-weight="600" text-anchor="end">10 kN</text>
+  <line x1="275" y1="75" x2="275" y2="114" stroke="#c62828" stroke-width="2"/>
+  <polygon points="275,119 270,109 280,109" fill="#c62828"/>
+  <text x="282" y="95" font-size="12" fill="#c62828" font-weight="600">10 kN</text>
+  <line x1="200" y1="77" x2="200" y2="40" stroke="#c62828" stroke-width="2"/>
+  <polygon points="200,35 195,46 205,46" fill="#c62828"/>
+  <text x="207" y="52" font-size="12" fill="#c62828" font-weight="600">7.5 kN</text>
+  <!-- supports -->
+  <polygon points="50,158 40,176 60,176" fill="#fff" stroke="#222" stroke-width="1.5"/>
+  <rect x="34" y="176" width="32" height="6" fill="url(#g43)" stroke="#666"/>
+  <polygon points="350,158 340,174 360,174" fill="#fff" stroke="#222" stroke-width="1.5"/>
+  <circle cx="344" cy="179" r="3" fill="#fff" stroke="#222"/>
+  <circle cx="350" cy="179" r="3" fill="#fff" stroke="#222"/>
+  <circle cx="356" cy="179" r="3" fill="#fff" stroke="#222"/>
+  <rect x="334" y="183" width="32" height="6" fill="url(#g43)" stroke="#666"/>
+  <!-- nodes -->
+  <g fill="#fff" stroke="#333">
+    <circle cx="50" cy="158" r="3"/><circle cx="125" cy="158" r="3"/><circle cx="200" cy="158" r="3"/>
+    <circle cx="275" cy="158" r="3"/><circle cx="350" cy="158" r="3"/>
+    <circle cx="125" cy="120" r="3"/><circle cx="275" cy="120" r="3"/><circle cx="200" cy="83" r="3"/>
+  </g>
+  <!-- labels -->
+  <text x="38" y="152" font-size="11" font-weight="600">A</text>
+  <text x="121" y="172" font-size="11">C</text>
+  <text x="196" y="172" font-size="11">D</text>
+  <text x="271" y="172" font-size="11">E</text>
+  <text x="358" y="152" font-size="11" font-weight="600">B</text>
+  <text x="110" y="116" font-size="11">F</text>
+  <text x="283" y="116" font-size="11">G</text>
+  <text x="190" y="76" font-size="11">H</text>
+  <!-- dims -->
+  <g stroke="#444">
+    <line x1="50" y1="196" x2="350" y2="196"/>
+    <line x1="50" y1="191" x2="50" y2="201"/><line x1="125" y1="191" x2="125" y2="201"/>
+    <line x1="200" y1="191" x2="200" y2="201"/><line x1="275" y1="191" x2="275" y2="201"/>
+    <line x1="350" y1="191" x2="350" y2="201"/>
+    <line x1="384" y1="83" x2="384" y2="158"/>
+    <line x1="380" y1="83" x2="388" y2="83"/><line x1="380" y1="120" x2="388" y2="120"/>
+    <line x1="380" y1="158" x2="388" y2="158"/>
+  </g>
+  <text x="87" y="210" font-size="10" text-anchor="middle">2.50 m</text>
+  <text x="162" y="210" font-size="10" text-anchor="middle">2.50 m</text>
+  <text x="237" y="210" font-size="10" text-anchor="middle">2.50 m</text>
+  <text x="312" y="210" font-size="10" text-anchor="middle">2.50 m</text>
+  <text x="391" y="105" font-size="10">1.25 m</text>
+  <text x="391" y="142" font-size="10">1.25 m</text>
+</svg>
+</div>
+<div class="col-right">
+<h4>Step 0 — Is it isostatic? &nbsp;+&nbsp; geometry</h4>
+<div class="formula">DSI = ED + ID = (3 reactions − 3 DOFs) + 0 = 0  → isostatic ✓
+Truss check:  m + r = 13 + 3 = 16 = 2n = 2·8 ✓
+
+Rafter angle (every inclined bar has the same α):
+   tan α = 1.25 / 2.50 = 0.5
+   α = 26.57°,  sin α = 0.4472,  cos α = 0.8944</div>
+<h4>Step 1 — Reactions</h4>
+<div class="formula">Σ F<sub>x</sub> = 0:   H<sub>A</sub> = 0
+
+Σ M<sub>A</sub> = 0 (CCW⁺):
+   −10·(2.5) + 7.5·(5) − 10·(7.5) + V<sub>B</sub>·(10) = 0
+   ⇒  V<sub>B</sub> = 62.5 / 10 = 6.25 kN ↑
+
+Σ F<sub>y</sub> = 0:
+   V<sub>A</sub> + 6.25 − 10 − 10 + 7.5 = 0
+   ⇒  V<sub>A</sub> = 6.25 kN ↑</div>
+<div class="note">Loads (10 + 10 − 7.5 = 12.5 kN) and structure are both symmetric about the
+vertical axis H–D ⇒ V<sub>A</sub> = V<sub>B</sub> = 12.5/2 = 6.25 kN. We only need to solve the
+<b>left half</b>; the right half mirrors it.</div>
+</div>
+</div>
+
+<h3>Selection of cuts</h3>
+<div class="row">
+<div class="col-left">
+<svg viewBox="0 0 430 200">
+  <!-- bars (light) -->
+  <g stroke="#999" stroke-width="2" fill="none">
+    <line x1="50" y1="158" x2="350" y2="158"/>
+    <line x1="50" y1="158" x2="200" y2="83"/>
+    <line x1="200" y1="83" x2="350" y2="158"/>
+    <line x1="125" y1="158" x2="125" y2="120"/>
+    <line x1="200" y1="158" x2="200" y2="83"/>
+    <line x1="275" y1="158" x2="275" y2="120"/>
+    <line x1="125" y1="120" x2="200" y2="158"/>
+    <line x1="200" y1="158" x2="275" y2="120"/>
+  </g>
+  <g fill="#fff" stroke="#888">
+    <circle cx="50" cy="158" r="3"/><circle cx="125" cy="158" r="3"/><circle cx="200" cy="158" r="3"/>
+    <circle cx="275" cy="158" r="3"/><circle cx="350" cy="158" r="3"/>
+    <circle cx="125" cy="120" r="3"/><circle cx="275" cy="120" r="3"/><circle cx="200" cy="83" r="3"/>
+  </g>
+  <text x="38" y="152" font-size="11">A</text><text x="121" y="172" font-size="11">C</text>
+  <text x="196" y="172" font-size="11">D</text><text x="271" y="172" font-size="11">E</text>
+  <text x="358" y="152" font-size="11">B</text><text x="110" y="116" font-size="11">F</text>
+  <text x="283" y="116" font-size="11">G</text><text x="190" y="76" font-size="11">H</text>
+  <!-- cut 1: red snake through AF, FC, CD -->
+  <path d="M 78,100 C 95,135 100,138 112,142 C 124,146 130,148 140,151 C 148,154 152,160 156,172"
+        fill="none" stroke="#c62828" stroke-width="2" stroke-dasharray="6,4"/>
+  <text x="58" y="94" font-size="12" fill="#c62828" font-weight="600">cut 1</text>
+  <!-- cut 2: green vertical through FH, FD, CD -->
+  <line x1="162" y1="58" x2="162" y2="185" stroke="#2e7d32" stroke-width="2" stroke-dasharray="6,4"/>
+  <text x="138" y="52" font-size="12" fill="#2e7d32" font-weight="600">cut 2</text>
+  <!-- cut 3: magenta horizontal around H -->
+  <line x1="158" y1="97" x2="246" y2="97" stroke="#c2185b" stroke-width="2" stroke-dasharray="6,4"/>
+  <text x="252" y="100" font-size="12" fill="#c2185b" font-weight="600">cut 3</text>
+  <!-- cut 4: cyan arc around A -->
+  <path d="M 36,133 Q 62,140 68,178" fill="none" stroke="#0097a7" stroke-width="2" stroke-dasharray="6,4"/>
+  <text x="14" y="126" font-size="12" fill="#0097a7" font-weight="600">cut 4</text>
+  <!-- symmetry axis -->
+  <line x1="200" y1="30" x2="200" y2="60" stroke="#2a6df4" stroke-width="1.5" stroke-dasharray="3,3"/>
+  <text x="206" y="42" font-size="10" fill="#2a6df4">axis of symmetry</text>
+</svg>
+</div>
+<div class="col-right">
+<h4>The rule for choosing a cut</h4>
+<p style="font-size:14px; margin:6px 0;">Each cut may intersect bars with <b>at most 3 unknown</b>
+internal forces (3 equilibrium equations per free body). Knowns from earlier cuts don't count.</p>
+<table class="summary">
+<thead><tr><th>Cut</th><th>Bars intersected</th><th>Unknowns</th><th>Gives</th></tr></thead>
+<tbody>
+<tr><td><b style="color:#c62828">1</b></td><td>AF, FC, CD</td><td>3</td><td>N<sub>AF</sub>, N<sub>FC</sub>, N<sub>CD</sub></td></tr>
+<tr><td><b style="color:#2e7d32">2</b></td><td>FH, FD, CD <span style="color:#888">(known)</span></td><td>2</td><td>N<sub>FH</sub>, N<sub>FD</sub></td></tr>
+<tr><td><b style="color:#c2185b">3</b></td><td>FH <span style="color:#888">(known)</span>, HD, HG</td><td>2</td><td>N<sub>HG</sub>, N<sub>HD</sub></td></tr>
+<tr><td><b style="color:#0097a7">4</b></td><td>AF <span style="color:#888">(known)</span>, AC</td><td>1</td><td>N<sub>AC</sub></td></tr>
+</tbody>
+</table>
+<div class="note">Any other sequence of valid cuts works too — this is the one used in the official
+solved PDF, so you can compare line by line. Everything on the right half follows by <b>symmetry</b>.</div>
+</div>
+</div>
+
+<!-- ============ CUT 1 ============ -->
+<div class="sub">
+<div class="sub-title">Cut 1 — free body {A, C} · unknowns N<sub>AF</sub>, N<sub>FC</sub>, N<sub>CD</sub></div>
+<div class="row">
+<div class="col-left">
+<svg viewBox="0 0 300 215">
+  <pattern id="c1g" patternUnits="userSpaceOnUse" width="6" height="6" patternTransform="rotate(45)">
+    <line x1="0" y1="0" x2="0" y2="6" stroke="#888" stroke-width="1"/>
+  </pattern>
+  <!-- bar A-C -->
+  <line x1="60" y1="150" x2="170" y2="150" stroke="#222" stroke-width="3"/>
+  <!-- ghost F position (for the moment arm) -->
+  <line x1="122" y1="119" x2="170" y2="95" stroke="#bbb" stroke-width="1.5" stroke-dasharray="4,3"/>
+  <line x1="170" y1="95" x2="170" y2="146" stroke="#bbb" stroke-width="1" stroke-dasharray="4,3"/>
+  <circle cx="170" cy="95" r="3" fill="#fff" stroke="#aaa"/>
+  <text x="177" y="92" font-size="11" fill="#888">F (off the body)</text>
+  <!-- support pin at A -->
+  <polygon points="60,150 50,168 70,168" fill="#fff" stroke="#222" stroke-width="1.5"/>
+  <rect x="44" y="168" width="32" height="6" fill="url(#c1g)" stroke="#666"/>
+  <!-- reaction -->
+  <line x1="34" y1="196" x2="34" y2="138" stroke="#1565c0" stroke-width="2.5"/>
+  <polygon points="34,131 28,143 40,143" fill="#1565c0"/>
+  <text x="6" y="170" font-size="12" fill="#1565c0" font-weight="700">6.25</text>
+  <!-- N_AF along rafter -->
+  <line x1="60" y1="150" x2="115" y2="122" stroke="#c62828" stroke-width="2.5"/>
+  <polygon points="122,119 110,121 115,131" fill="#c62828"/>
+  <text x="78" y="118" font-size="13" fill="#c62828" font-weight="700">N<tspan font-size="9" dy="3">AF</tspan></text>
+  <!-- angle alpha -->
+  <path d="M 88,150 A 28 28 0 0 0 85,137" fill="none" stroke="#e65100" stroke-width="1.5"/>
+  <text x="93" y="143" font-size="11" fill="#e65100">α</text>
+  <!-- N_FC up at C -->
+  <line x1="170" y1="150" x2="170" y2="112" stroke="#c62828" stroke-width="2.5"/>
+  <polygon points="170,105 164,117 176,117" fill="#c62828"/>
+  <text x="146" y="115" font-size="13" fill="#c62828" font-weight="700">N<tspan font-size="9" dy="3">FC</tspan></text>
+  <!-- N_CD right at C -->
+  <line x1="170" y1="150" x2="225" y2="150" stroke="#c62828" stroke-width="2.5"/>
+  <polygon points="232,150 220,144 220,156" fill="#c62828"/>
+  <text x="232" y="142" font-size="13" fill="#c62828" font-weight="700">N<tspan font-size="9" dy="3">CD</tspan></text>
+  <!-- nodes & labels -->
+  <circle cx="60" cy="150" r="3" fill="#fff" stroke="#333"/>
+  <circle cx="170" cy="150" r="3" fill="#fff" stroke="#333"/>
+  <text x="50" y="144" font-size="11" font-weight="600">A</text>
+  <text x="166" y="165" font-size="11" font-weight="600">C</text>
+  <!-- dims -->
+  <line x1="60" y1="186" x2="170" y2="186" stroke="#444"/>
+  <line x1="60" y1="181" x2="60" y2="191" stroke="#444"/>
+  <line x1="170" y1="181" x2="170" y2="191" stroke="#444"/>
+  <text x="115" y="201" font-size="11" text-anchor="middle">2.50 m</text>
+  <line x1="246" y1="95" x2="246" y2="150" stroke="#444"/>
+  <line x1="242" y1="95" x2="250" y2="95" stroke="#444"/>
+  <line x1="242" y1="150" x2="250" y2="150" stroke="#444"/>
+  <text x="253" y="126" font-size="11">1.25 m</text>
+</svg>
+<div class="fbd-legend">
+  <span><i style="border-color:#1565c0"></i>reaction (known)</span>
+  <span><i style="border-color:#c62828"></i>unknown bar force (assumed tension)</span>
+</div>
+</div>
+<div class="col-right">
+<h4>3 unknowns ⇒ 3 equations</h4>
+<div class="formula">Σ M<sub>F</sub> = 0 (CCW⁺):   ← F kills N<sub>AF</sub> &amp; N<sub>FC</sub>
+   N<sub>CD</sub>·(1.25) − 6.25·(2.5) = 0
+   ⇒  N<sub>CD</sub> = <b>+12.5 kN</b>
+
+Σ F<sub>x</sub> = 0:
+   N<sub>CD</sub> + N<sub>AF</sub>·cos α = 0
+   ⇒  N<sub>AF</sub> = −12.5 / 0.8944 = <b>−13.98 kN</b>
+
+Σ F<sub>y</sub> = 0:
+   6.25 + N<sub>AF</sub>·sin α + N<sub>FC</sub> = 0
+   ⇒  N<sub>FC</sub> = −6.25 − (−13.98)(0.4472) = <b>0 kN</b></div>
+<div class="answer">
+N<sub>CD</sub> = 12.5 kN <span class="tension">(tension)</span> &nbsp;·&nbsp;
+N<sub>AF</sub> = 13.98 kN <span class="compression">(compression)</span> &nbsp;·&nbsp;
+N<sub>FC</sub> = 0
+</div>
+<div class="note"><b>Shortcut you could have used:</b> joint C connects only AC–CD (collinear) + CF
+(perpendicular stub), with no load at C ⇒ <b>zero-force member rule</b>: N<sub>CF</sub> = 0 by
+inspection. Same rule gives N<sub>EG</sub> = 0 on the right half.</div>
+</div>
+</div>
+</div>
+
+<!-- ============ CUT 2 ============ -->
+<div class="sub">
+<div class="sub-title">Cut 2 — free body {A, C, F} · unknowns N<sub>FH</sub>, N<sub>FD</sub> (N<sub>CD</sub> already known)</div>
+<div class="row">
+<div class="col-left">
+<svg viewBox="0 0 300 225">
+  <pattern id="c2g" patternUnits="userSpaceOnUse" width="6" height="6" patternTransform="rotate(45)">
+    <line x1="0" y1="0" x2="0" y2="6" stroke="#888" stroke-width="1"/>
+  </pattern>
+  <!-- bars -->
+  <line x1="50" y1="160" x2="160" y2="160" stroke="#222" stroke-width="3"/>
+  <line x1="50" y1="160" x2="160" y2="105" stroke="#222" stroke-width="3"/>
+  <line x1="160" y1="160" x2="160" y2="105" stroke="#222" stroke-width="3"/>
+  <!-- support pin at A -->
+  <polygon points="50,160 40,178 60,178" fill="#fff" stroke="#222" stroke-width="1.5"/>
+  <rect x="34" y="178" width="32" height="6" fill="url(#c2g)" stroke="#666"/>
+  <!-- reaction -->
+  <line x1="26" y1="205" x2="26" y2="150" stroke="#1565c0" stroke-width="2.5"/>
+  <polygon points="26,143 20,155 32,155" fill="#1565c0"/>
+  <text x="2" y="180" font-size="12" fill="#1565c0" font-weight="700">6.25</text>
+  <!-- load 10 kN at F -->
+  <line x1="160" y1="58" x2="160" y2="96" stroke="#c62828" stroke-width="2"/>
+  <polygon points="160,101 155,91 165,91" fill="#c62828"/>
+  <text x="138" y="74" font-size="12" fill="#c62828" font-weight="600" text-anchor="end">10 kN</text>
+  <!-- known N_CD -->
+  <line x1="160" y1="160" x2="212" y2="160" stroke="#2e7d32" stroke-width="2.5"/>
+  <polygon points="219,160 207,154 207,166" fill="#2e7d32"/>
+  <text x="196" y="178" font-size="12" fill="#2e7d32" font-weight="700">12.5 kN</text>
+  <text x="196" y="191" font-size="10" fill="#2e7d32">(N<tspan font-size="8" dy="2">CD</tspan><tspan dy="-2"> known)</tspan></text>
+  <!-- N_FH unknown -->
+  <line x1="160" y1="105" x2="215" y2="77" stroke="#c62828" stroke-width="2.5"/>
+  <polygon points="222,74 210,76 215,86" fill="#c62828"/>
+  <text x="226" y="72" font-size="13" fill="#c62828" font-weight="700">N<tspan font-size="9" dy="3">FH</tspan></text>
+  <!-- N_FD unknown -->
+  <line x1="160" y1="105" x2="215" y2="133" stroke="#c62828" stroke-width="2.5"/>
+  <polygon points="222,136 212,128 207,138" fill="#c62828"/>
+  <text x="226" y="142" font-size="13" fill="#c62828" font-weight="700">N<tspan font-size="9" dy="3">FD</tspan></text>
+  <!-- nodes & labels -->
+  <circle cx="50" cy="160" r="3" fill="#fff" stroke="#333"/>
+  <circle cx="160" cy="160" r="3" fill="#fff" stroke="#333"/>
+  <circle cx="160" cy="105" r="3" fill="#fff" stroke="#333"/>
+  <text x="40" y="154" font-size="11" font-weight="600">A</text>
+  <text x="156" y="175" font-size="11" font-weight="600">C</text>
+  <text x="143" y="110" font-size="11" font-weight="600">F</text>
+</svg>
+<div class="fbd-legend">
+  <span><i style="border-color:#1565c0"></i>reaction</span>
+  <span><i style="border-color:#2e7d32"></i>known bar force</span>
+  <span><i style="border-color:#c62828"></i>unknown (assumed tension)</span>
+</div>
+</div>
+<div class="col-right">
+<h4>2 unknowns ⇒ 2 equations</h4>
+<div class="formula">Σ F<sub>x</sub> = 0:
+   12.5 + N<sub>FH</sub>·cos α + N<sub>FD</sub>·cos α = 0
+   ⇒  N<sub>FH</sub> + N<sub>FD</sub> = −12.5/0.8944 = −13.98   (1)
+
+Σ F<sub>y</sub> = 0:
+   6.25 − 10 + N<sub>FH</sub>·sin α − N<sub>FD</sub>·sin α = 0
+   ⇒  N<sub>FH</sub> − N<sub>FD</sub> = 3.75/0.4472 = +8.39    (2)
+
+(1)+(2):  2·N<sub>FH</sub> = −5.59  ⇒  N<sub>FH</sub> = <b>−2.80 kN</b>
+(1)−(2):  2·N<sub>FD</sub> = −22.36 ⇒  N<sub>FD</sub> = <b>−11.18 kN</b></div>
+<div class="answer">
+N<sub>FH</sub> = 2.80 kN <span class="compression">(compression)</span> &nbsp;·&nbsp;
+N<sub>FD</sub> = 11.18 kN <span class="compression">(compression)</span>
+</div>
+<div class="note"><b>Do not forget the external 10 kN at F</b> — it is inside this free body.
+Forgetting applied loads on the kept part is the #1 Ritter error.</div>
+</div>
+</div>
+</div>
+
+<!-- ============ CUT 3 ============ -->
+<div class="sub">
+<div class="sub-title">Cut 3 — free body {H} · unknowns N<sub>HG</sub>, N<sub>HD</sub> (N<sub>FH</sub> known)</div>
+<div class="row">
+<div class="col-left">
+<svg viewBox="0 0 300 195">
+  <!-- known push from FH (compression pushes INTO the node) -->
+  <line x1="90" y1="125" x2="138" y2="101" stroke="#2e7d32" stroke-width="2.5"/>
+  <polygon points="145,98 133,99 137,109" fill="#2e7d32"/>
+  <text x="38" y="122" font-size="12" fill="#2e7d32" font-weight="700">2.80 kN</text>
+  <text x="38" y="135" font-size="10" fill="#2e7d32">(known, compression</text>
+  <text x="38" y="147" font-size="10" fill="#2e7d32">⇒ pushes into H)</text>
+  <!-- load 7.5 up -->
+  <line x1="150" y1="89" x2="150" y2="46" stroke="#c62828" stroke-width="2"/>
+  <polygon points="150,40 145,51 155,51" fill="#c62828"/>
+  <text x="157" y="55" font-size="12" fill="#c62828" font-weight="600">7.5 kN</text>
+  <!-- N_HG -->
+  <line x1="150" y1="95" x2="205" y2="123" stroke="#c62828" stroke-width="2.5"/>
+  <polygon points="212,126 202,118 197,128" fill="#c62828"/>
+  <text x="216" y="132" font-size="13" fill="#c62828" font-weight="700">N<tspan font-size="9" dy="3">HG</tspan></text>
+  <!-- N_HD -->
+  <line x1="150" y1="95" x2="150" y2="152" stroke="#c62828" stroke-width="2.5"/>
+  <polygon points="150,159 144,147 156,147" fill="#c62828"/>
+  <text x="158" y="152" font-size="13" fill="#c62828" font-weight="700">N<tspan font-size="9" dy="3">HD</tspan></text>
+  <!-- node -->
+  <circle cx="150" cy="95" r="3.5" fill="#fff" stroke="#333"/>
+  <text x="141" y="86" font-size="12" font-weight="600">H</text>
+</svg>
+<div class="fbd-legend">
+  <span><i style="border-color:#2e7d32"></i>known bar force</span>
+  <span><i style="border-color:#c62828"></i>unknown (assumed tension)</span>
+</div>
+</div>
+<div class="col-right">
+<h4>2 unknowns ⇒ 2 equations</h4>
+<div class="formula">Σ F<sub>x</sub> = 0:
+   2.80·cos α + N<sub>HG</sub>·cos α = 0
+   ⇒  N<sub>HG</sub> = <b>−2.80 kN</b>   (= N<sub>FH</sub>, as symmetry predicts)
+
+Σ F<sub>y</sub> = 0 (↑⁺):
+   2.80·sin α − N<sub>HG</sub>·sin α + 7.5 − N<sub>HD</sub> = 0
+   1.25 + 1.25 + 7.5 − N<sub>HD</sub> = 0
+   ⇒  N<sub>HD</sub> = <b>+10.0 kN</b></div>
+<div class="answer">
+N<sub>HG</sub> = 2.80 kN <span class="compression">(compression)</span> &nbsp;·&nbsp;
+N<sub>HD</sub> = 10.0 kN <span class="tension">(tension)</span>
+</div>
+</div>
+</div>
+<div class="err">
+<b>⚠ The official handwritten PDF has a typo here.</b> It concludes
+“N<sub>HD</sub> = 7.5 kN” and carries +7.5 into the final drawing — but plug the numbers into
+<em>its own</em> equation: 2.79·sin 26.56° + 2.79·sin 26.56° + 7.5 = 1.25 + 1.25 + 7.5 = <b>10.0</b>.
+The printed answer sheet (Practical_notes_4.pdf, p. 6) correctly shows <b>10.00</b>.
+The trap: at joint H it is tempting to say “the bar under the load just carries the 7.5 kN” —
+wrong, because the two rafters also push <em>up</em> at H (2×1.25 kN), and HD must pull the node
+down against all of it. <b>Cross-check with joint D:</b>
+ΣF<sub>y</sub> at D: N<sub>HD</sub> = −(N<sub>FD</sub> + N<sub>DG</sub>)·sin α = −(−22.36)(0.4472) = +10.0 ✓
+</div>
+</div>
+
+<!-- ============ CUT 4 ============ -->
+<div class="sub">
+<div class="sub-title">Cut 4 — free body {A} · unknown N<sub>AC</sub> (N<sub>AF</sub> known)</div>
+<div class="row">
+<div class="col-left">
+<svg viewBox="0 0 260 190">
+  <!-- known push from AF (compression pushes INTO node A, i.e. down-left) -->
+  <line x1="139" y1="91" x2="91" y2="115" stroke="#2e7d32" stroke-width="2.5"/>
+  <polygon points="84,118 96,118 91,108" fill="#2e7d32"/>
+  <text x="146" y="88" font-size="12" fill="#2e7d32" font-weight="700">13.98 kN</text>
+  <text x="146" y="101" font-size="10" fill="#2e7d32">(known, compression)</text>
+  <!-- reaction -->
+  <line x1="80" y1="165" x2="80" y2="132" stroke="#1565c0" stroke-width="2.5"/>
+  <polygon points="80,125 74,137 86,137" fill="#1565c0"/>
+  <text x="52" y="152" font-size="12" fill="#1565c0" font-weight="700">6.25</text>
+  <!-- N_AC -->
+  <line x1="80" y1="120" x2="145" y2="120" stroke="#c62828" stroke-width="2.5"/>
+  <polygon points="152,120 140,114 140,126" fill="#c62828"/>
+  <text x="156" y="124" font-size="13" fill="#c62828" font-weight="700">N<tspan font-size="9" dy="3">AC</tspan></text>
+  <!-- node -->
+  <circle cx="80" cy="120" r="3.5" fill="#fff" stroke="#333"/>
+  <text x="64" y="116" font-size="12" font-weight="600">A</text>
+</svg>
+</div>
+<div class="col-right">
+<h4>1 unknown ⇒ 1 equation is enough</h4>
+<div class="formula">Σ F<sub>x</sub> = 0:
+   N<sub>AC</sub> − 13.98·cos α = 0
+   ⇒  N<sub>AC</sub> = 13.98 · 0.8944 = <b>+12.5 kN</b>
+
+(check  Σ F<sub>y</sub>: 6.25 − 13.98·sin α = 6.25 − 6.25 = 0 ✓)</div>
+<div class="answer">
+N<sub>AC</sub> = 12.5 kN <span class="tension">(tension)</span>
+</div>
+<div class="note">The compressed rafter pushes node A down-left; the bottom chord must pull right
+to hold it — that is exactly why the bottom chord of a roof truss is a <b>tie</b> (tension).</div>
+</div>
+</div>
+</div>
+
+<h3>Symmetry → right half · final result</h3>
+<div class="row">
+<div class="col-left">
+<svg viewBox="0 0 430 215">
+  <!-- symmetry axis -->
+  <line x1="200" y1="35" x2="200" y2="200" stroke="#2a6df4" stroke-width="1" stroke-dasharray="5,4"/>
+  <!-- bars colored by sign -->
+  <g stroke-width="2.5" fill="none">
+    <line x1="50" y1="158" x2="350" y2="158" stroke="#2e7d32"/>
+    <line x1="50" y1="158" x2="200" y2="83" stroke="#c62828"/>
+    <line x1="200" y1="83" x2="350" y2="158" stroke="#c62828"/>
+    <line x1="125" y1="158" x2="125" y2="120" stroke="#9e9e9e" stroke-dasharray="4,3"/>
+    <line x1="200" y1="158" x2="200" y2="83" stroke="#2e7d32"/>
+    <line x1="275" y1="158" x2="275" y2="120" stroke="#9e9e9e" stroke-dasharray="4,3"/>
+    <line x1="125" y1="120" x2="200" y2="158" stroke="#c62828"/>
+    <line x1="200" y1="158" x2="275" y2="120" stroke="#c62828"/>
+  </g>
+  <g fill="#fff" stroke="#333">
+    <circle cx="50" cy="158" r="3"/><circle cx="125" cy="158" r="3"/><circle cx="200" cy="158" r="3"/>
+    <circle cx="275" cy="158" r="3"/><circle cx="350" cy="158" r="3"/>
+    <circle cx="125" cy="120" r="3"/><circle cx="275" cy="120" r="3"/><circle cx="200" cy="83" r="3"/>
+  </g>
+  <text x="38" y="152" font-size="11" font-weight="600">A</text>
+  <text x="121" y="172" font-size="11">C</text><text x="196" y="172" font-size="11">D</text>
+  <text x="271" y="172" font-size="11">E</text><text x="358" y="152" font-size="11" font-weight="600">B</text>
+  <text x="110" y="116" font-size="11">F</text><text x="283" y="116" font-size="11">G</text>
+  <text x="190" y="76" font-size="11">H</text>
+  <!-- values -->
+  <text x="64" y="125" font-size="11" fill="#c62828" font-weight="600" transform="rotate(-27 64 125)">−13.98</text>
+  <text x="140" y="92" font-size="11" fill="#c62828" font-weight="600" transform="rotate(-27 140 92)">−2.80</text>
+  <text x="228" y="80" font-size="11" fill="#c62828" font-weight="600" transform="rotate(27 228 80)">−2.80</text>
+  <text x="300" y="113" font-size="11" fill="#c62828" font-weight="600" transform="rotate(27 300 113)">−13.98</text>
+  <text x="143" y="135" font-size="11" fill="#c62828" font-weight="600" transform="rotate(27 143 135)">−11.18</text>
+  <text x="224" y="146" font-size="11" fill="#c62828" font-weight="600" transform="rotate(-27 224 146)">−11.18</text>
+  <text x="87" y="153" font-size="11" fill="#2e7d32" font-weight="600" text-anchor="middle">+12.50</text>
+  <text x="162" y="153" font-size="11" fill="#2e7d32" font-weight="600" text-anchor="middle">+12.50</text>
+  <text x="237" y="153" font-size="11" fill="#2e7d32" font-weight="600" text-anchor="middle">+12.50</text>
+  <text x="312" y="153" font-size="11" fill="#2e7d32" font-weight="600" text-anchor="middle">+12.50</text>
+  <text x="205" y="125" font-size="11" fill="#2e7d32" font-weight="600">+10.00</text>
+  <text x="117" y="143" font-size="10" fill="#9e9e9e">0</text>
+  <text x="280" y="143" font-size="10" fill="#9e9e9e">0</text>
+  <!-- reactions -->
+  <line x1="50" y1="200" x2="50" y2="170" stroke="#1565c0" stroke-width="2"/>
+  <polygon points="50,164 45,174 55,174" fill="#1565c0"/>
+  <text x="20" y="195" font-size="10" fill="#1565c0" font-weight="600">6.25</text>
+  <line x1="350" y1="200" x2="350" y2="170" stroke="#1565c0" stroke-width="2"/>
+  <polygon points="350,164 345,174 355,174" fill="#1565c0"/>
+  <text x="358" y="195" font-size="10" fill="#1565c0" font-weight="600">6.25</text>
+</svg>
+<div class="fbd-legend">
+  <span><i style="border-color:#2e7d32"></i>tension (+)</span>
+  <span><i style="border-color:#c62828"></i>compression (−)</span>
+  <span><i style="border-color:#9e9e9e"></i>zero-force bar</span>
+</div>
+</div>
+<div class="col-right">
+<h4>Summary — all 13 bars (kN)</h4>
+<table class="summary">
+<thead><tr><th>Bar(s)</th><th>N</th><th>State</th></tr></thead>
+<tbody>
+<tr><td>AC, CD, DE, EB (bottom chord)</td><td>+12.50</td><td class="tension">tension</td></tr>
+<tr><td>AF, GB (lower rafters)</td><td>−13.98</td><td class="compression">compression</td></tr>
+<tr><td>FH, HG (upper rafters)</td><td>−2.80</td><td class="compression">compression</td></tr>
+<tr><td>FD, DG (diagonals)</td><td>−11.18</td><td class="compression">compression</td></tr>
+<tr><td>HD (king post)</td><td>+10.00</td><td class="tension">tension</td></tr>
+<tr><td>CF, EG (side verticals)</td><td>0</td><td>zero-force</td></tr>
+</tbody>
+</table>
+<div class="note"><b>Physical picture:</b> the rafters arch the loads to the supports in
+compression; the bottom chord is the tie that stops the “arch” from spreading; the king post HD
+hangs node D from the apex. Classic king-post truss behaviour.</div>
+</div>
+</div>
+
+</section>
+
+<!-- ================== PROBLEM 4.4 ================== -->
+<section id="p44">
+<h2>Problem 4.4 — Square truss · (a) method of joints, (b) Ritter's method</h2>
+
+<div class="row">
+<div class="col-left">
+<h4>Given structure</h4>
+<svg viewBox="0 0 430 330">
+  <pattern id="g44" patternUnits="userSpaceOnUse" width="6" height="6" patternTransform="rotate(45)">
+    <line x1="0" y1="0" x2="0" y2="6" stroke="#888" stroke-width="1"/>
+  </pattern>
+  <!-- bars -->
+  <g stroke="#222" stroke-width="2" fill="none">
+    <line x1="90" y1="85" x2="270" y2="85"/>     <!-- C-D -->
+    <line x1="90" y1="85" x2="90" y2="265"/>     <!-- C-A -->
+    <line x1="270" y1="85" x2="270" y2="265"/>   <!-- D-B -->
+    <line x1="90" y1="265" x2="270" y2="265"/>   <!-- A-B -->
+    <line x1="90" y1="265" x2="270" y2="85"/>    <!-- A-E-D diagonal -->
+    <line x1="90" y1="85" x2="180" y2="175"/>    <!-- C-E -->
+  </g>
+  <!-- loads -->
+  <line x1="90" y1="35" x2="90" y2="78" stroke="#c62828" stroke-width="2"/>
+  <polygon points="90,83 85,73 95,73" fill="#c62828"/>
+  <text x="97" y="50" font-size="12" fill="#c62828" font-weight="600">100 kN</text>
+  <line x1="270" y1="30" x2="270" y2="78" stroke="#c62828" stroke-width="2"/>
+  <polygon points="270,83 265,73 275,73" fill="#c62828"/>
+  <text x="277" y="48" font-size="12" fill="#c62828" font-weight="600">200 kN</text>
+  <line x1="82" y1="85" x2="40" y2="85" stroke="#c62828" stroke-width="2"/>
+  <polygon points="34,85 46,80 46,90" fill="#c62828"/>
+  <text x="10" y="73" font-size="12" fill="#c62828" font-weight="600">100 kN</text>
+  <line x1="278" y1="85" x2="320" y2="85" stroke="#c62828" stroke-width="2"/>
+  <polygon points="326,85 314,80 314,90" fill="#c62828"/>
+  <text x="300" y="73" font-size="12" fill="#c62828" font-weight="600">100 kN</text>
+  <!-- supports -->
+  <polygon points="90,265 80,283 100,283" fill="#fff" stroke="#222" stroke-width="1.5"/>
+  <rect x="74" y="283" width="32" height="6" fill="url(#g44)" stroke="#666"/>
+  <polygon points="270,265 260,281 280,281" fill="#fff" stroke="#222" stroke-width="1.5"/>
+  <circle cx="264" cy="286" r="3" fill="#fff" stroke="#222"/>
+  <circle cx="270" cy="286" r="3" fill="#fff" stroke="#222"/>
+  <circle cx="276" cy="286" r="3" fill="#fff" stroke="#222"/>
+  <rect x="254" y="290" width="32" height="6" fill="url(#g44)" stroke="#666"/>
+  <!-- nodes -->
+  <g fill="#fff" stroke="#333">
+    <circle cx="90" cy="85" r="3.5"/><circle cx="270" cy="85" r="3.5"/>
+    <circle cx="90" cy="265" r="3.5"/><circle cx="270" cy="265" r="3.5"/>
+    <circle cx="180" cy="175" r="3.5"/>
+  </g>
+  <!-- labels -->
+  <text x="74" y="80" font-size="12" font-weight="600">C</text>
+  <text x="280" y="98" font-size="12" font-weight="600">D</text>
+  <text x="72" y="262" font-size="12" font-weight="600">A</text>
+  <text x="282" y="262" font-size="12" font-weight="600">B</text>
+  <text x="160" y="172" font-size="12" font-weight="600">E</text>
+  <!-- dims -->
+  <g stroke="#444">
+    <line x1="90" y1="310" x2="180" y2="310"/>
+    <line x1="90" y1="305" x2="90" y2="315"/><line x1="180" y1="305" x2="180" y2="315"/>
+    <line x1="345" y1="175" x2="345" y2="265"/>
+    <line x1="341" y1="175" x2="349" y2="175"/><line x1="341" y1="265" x2="349" y2="265"/>
+    <line x1="370" y1="85" x2="370" y2="265"/>
+    <line x1="366" y1="85" x2="374" y2="85"/><line x1="366" y1="265" x2="374" y2="265"/>
+  </g>
+  <text x="135" y="325" font-size="10" text-anchor="middle">2.50 m</text>
+  <text x="318" y="224" font-size="10">2.50 m</text>
+  <text x="378" y="180" font-size="10">5.00 m</text>
+</svg>
+</div>
+<div class="col-right">
+<h4>Read the topology first (7 bars, 5 nodes)</h4>
+<div class="note">
+The diagonal <b>A–E–D is one straight line broken by hinge E</b> (two bars AE + ED), plus the
+stub <b>C–E</b>. So joint E has 3 bars, two of them collinear, and no load — remember this for later.
+<br>Isostatic check: m + r = 7 + 3 = 10 = 2n = 2·5 ✓
+</div>
+<h4>Step 1 — Reactions (common to (a) and (b))</h4>
+<div class="formula">Σ F<sub>x</sub> = 0:
+   H<sub>A</sub> − 100 + 100 = 0   ⇒   H<sub>A</sub> = 0
+
+Σ M<sub>A</sub> = 0 (CCW⁺):
+   V<sub>B</sub>·(5) − 200·(5) − 100·(5) + 100·(5) = 0
+     ↑          ↑D load     ↑100→ at D   ↑100← at C
+   ⇒  V<sub>B</sub> = 1000 / 5 = 200 kN ↑
+
+Σ F<sub>y</sub> = 0:
+   V<sub>A</sub> + 200 − 100 − 200 = 0   ⇒   V<sub>A</sub> = 100 kN ↑</div>
+<div class="answer">V<sub>A</sub> = 100 kN (↑) &nbsp; H<sub>A</sub> = 0 &nbsp; V<sub>B</sub> = 200 kN (↑)</div>
+<div class="note">The two horizontal 100 kN forces point in <b>opposite directions</b> (← at C, → at D)
+but act at the <b>same height</b> — they form a couple of 100·5 = 500 kN·m that the vertical
+reactions must balance, together with the moment of the 200 kN load.</div>
+</div>
+</div>
+
+<h3>(a) Method of joints — solve node by node</h3>
+<div class="note"><b>Golden rule for the order:</b> always move to a joint with <b>≤ 2 unknown bars</b>
+(2 equations per joint). Here: B → A → E → C, then D is the global check.
+Starting at C or D directly would give 3 unknowns — stuck.</div>
+
+<!-- Joint B -->
+<div class="sub">
+<div class="sub-title">Joint B — unknowns N<sub>BA</sub>, N<sub>BD</sub></div>
+<div class="row">
+<div class="col-left">
+<svg viewBox="0 0 240 175">
+  <line x1="120" y1="95" x2="50" y2="95" stroke="#c62828" stroke-width="2.5"/>
+  <polygon points="43,95 55,90 55,100" fill="#c62828"/>
+  <text x="30" y="83" font-size="13" fill="#c62828" font-weight="700">N<tspan font-size="9" dy="3">BA</tspan></text>
+  <line x1="120" y1="95" x2="120" y2="35" stroke="#c62828" stroke-width="2.5"/>
+  <polygon points="120,28 114,40 126,40" fill="#c62828"/>
+  <text x="128" y="42" font-size="13" fill="#c62828" font-weight="700">N<tspan font-size="9" dy="3">BD</tspan></text>
+  <line x1="120" y1="155" x2="120" y2="110" stroke="#1565c0" stroke-width="2.5"/>
+  <polygon points="120,103 114,115 126,115" fill="#1565c0"/>
+  <text x="128" y="140" font-size="12" fill="#1565c0" font-weight="700">200 kN</text>
+  <circle cx="120" cy="95" r="3.5" fill="#fff" stroke="#333"/>
+  <text x="104" y="91" font-size="12" font-weight="600">B</text>
+</svg>
+</div>
+<div class="col-right">
+<div class="formula">Σ F<sub>x</sub> = 0:   −N<sub>BA</sub> = 0          ⇒  N<sub>BA</sub> = <b>0</b>
+Σ F<sub>y</sub> = 0:   N<sub>BD</sub> + 200 = 0    ⇒  N<sub>BD</sub> = <b>−200 kN</b></div>
+<div class="answer">N<sub>AB</sub> = 0 &nbsp;·&nbsp; N<sub>BD</sub> = 200 kN <span class="compression">(compression)</span></div>
+<div class="note">B is a roller: only a vertical reaction. The 200 kN must go straight up the
+column DB; nothing pushes B sideways, so AB carries nothing.</div>
+</div>
+</div>
+</div>
+
+<!-- Joint A -->
+<div class="sub">
+<div class="sub-title">Joint A — unknowns N<sub>AC</sub>, N<sub>AE</sub> (N<sub>AB</sub> = 0 known)</div>
+<div class="row">
+<div class="col-left">
+<svg viewBox="0 0 240 185">
+  <line x1="100" y1="105" x2="170" y2="105" stroke="#9e9e9e" stroke-width="2" stroke-dasharray="4,3"/>
+  <text x="176" y="109" font-size="12" fill="#9e9e9e" font-weight="600">N<tspan font-size="9" dy="3">AB</tspan><tspan dy="-3"> = 0</tspan></text>
+  <line x1="100" y1="105" x2="100" y2="42" stroke="#c62828" stroke-width="2.5"/>
+  <polygon points="100,35 94,47 106,47" fill="#c62828"/>
+  <text x="74" y="48" font-size="13" fill="#c62828" font-weight="700">N<tspan font-size="9" dy="3">AC</tspan></text>
+  <line x1="100" y1="105" x2="148" y2="57" stroke="#c62828" stroke-width="2.5"/>
+  <polygon points="153,52 142,55 150,63" fill="#c62828"/>
+  <text x="158" y="52" font-size="13" fill="#c62828" font-weight="700">N<tspan font-size="9" dy="3">AE</tspan></text>
+  <path d="M 122,105 A 22 22 0 0 0 116,89" fill="none" stroke="#e65100" stroke-width="1.5"/>
+  <text x="127" y="97" font-size="11" fill="#e65100">45°</text>
+  <line x1="100" y1="165" x2="100" y2="120" stroke="#1565c0" stroke-width="2.5"/>
+  <polygon points="100,113 94,125 106,125" fill="#1565c0"/>
+  <text x="108" y="150" font-size="12" fill="#1565c0" font-weight="700">100 kN</text>
+  <circle cx="100" cy="105" r="3.5" fill="#fff" stroke="#333"/>
+  <text x="82" y="112" font-size="12" font-weight="600">A</text>
+</svg>
+</div>
+<div class="col-right">
+<div class="formula">Σ F<sub>x</sub> = 0:
+   N<sub>AB</sub> + N<sub>AE</sub>·cos 45° = 0 + N<sub>AE</sub>·0.707 = 0
+   ⇒  N<sub>AE</sub> = <b>0</b>
+
+Σ F<sub>y</sub> = 0:
+   N<sub>AC</sub> + N<sub>AE</sub>·sin 45° + 100 = 0
+   ⇒  N<sub>AC</sub> = <b>−100 kN</b></div>
+<div class="answer">N<sub>AE</sub> = 0 &nbsp;·&nbsp; N<sub>AC</sub> = 100 kN <span class="compression">(compression)</span></div>
+</div>
+</div>
+</div>
+
+<!-- Joint E -->
+<div class="sub">
+<div class="sub-title">Joint E — zero-force member rule (no load, 2 collinear bars + 1 stub)</div>
+<div class="row">
+<div class="col-left">
+<svg viewBox="0 0 240 185">
+  <line x1="120" y1="95" x2="62" y2="153" stroke="#222" stroke-width="2.5"/>
+  <line x1="120" y1="95" x2="178" y2="37" stroke="#222" stroke-width="2.5"/>
+  <line x1="120" y1="95" x2="62" y2="37" stroke="#222" stroke-width="2.5"/>
+  <line x1="40" y1="175" x2="200 " y2="15" stroke="#bbb" stroke-width="1" stroke-dasharray="5,4"/>
+  <circle cx="120" cy="95" r="3.5" fill="#fff" stroke="#333"/>
+  <text x="128" y="103" font-size="12" font-weight="600">E</text>
+  <text x="48" y="166" font-size="11">to A</text>
+  <text x="182" y="34" font-size="11">to D</text>
+  <text x="48" y="32" font-size="11">to C</text>
+  <text x="142" y="146" font-size="10" fill="#888">A–E–D collinear</text>
+</svg>
+</div>
+<div class="col-right">
+<div class="formula">⊥ to line A–D:   N<sub>CE</sub>·sin 90° = 0   ⇒  N<sub>CE</sub> = <b>0</b>
+∥ to line A–D:   N<sub>ED</sub> = N<sub>EA</sub> = <b>0</b>   (N<sub>AE</sub> = 0 from joint A)</div>
+<div class="answer">N<sub>CE</sub> = 0 &nbsp;·&nbsp; N<sub>ED</sub> = 0</div>
+<div class="note">This is the same rule you used in 4.3 at joints C and E: an unloaded joint with
+two collinear bars + one stub ⇒ the <b>stub is zero</b>, the collinear pair share one force.
+Worth memorizing — examiners love it.</div>
+</div>
+</div>
+</div>
+
+<!-- Joint C -->
+<div class="sub">
+<div class="sub-title">Joint C — unknown N<sub>CD</sub> (+ consistency check on N<sub>CA</sub>)</div>
+<div class="row">
+<div class="col-left">
+<svg viewBox="0 0 240 185">
+  <line x1="100" y1="85" x2="172" y2="85" stroke="#c62828" stroke-width="2.5"/>
+  <polygon points="179,85 167,80 167,90" fill="#c62828"/>
+  <text x="184" y="89" font-size="13" fill="#c62828" font-weight="700">N<tspan font-size="9" dy="3">CD</tspan></text>
+  <line x1="100" y1="85" x2="100" y2="148" stroke="#c62828" stroke-width="2.5"/>
+  <polygon points="100,155 94,143 106,143" fill="#c62828"/>
+  <text x="106" y="142" font-size="13" fill="#c62828" font-weight="700">N<tspan font-size="9" dy="3">CA</tspan></text>
+  <line x1="100" y1="85" x2="146" y2="131" stroke="#9e9e9e" stroke-width="2" stroke-dasharray="4,3"/>
+  <text x="150" y="142" font-size="12" fill="#9e9e9e" font-weight="600">N<tspan font-size="9" dy="3">CE</tspan><tspan dy="-3"> = 0</tspan></text>
+  <line x1="100" y1="22" x2="100" y2="70" stroke="#c62828" stroke-width="2"/>
+  <polygon points="100,76 95,66 105,66" fill="#c62828"/>
+  <text x="107" y="38" font-size="12" fill="#c62828" font-weight="600">100 kN</text>
+  <line x1="92" y1="85" x2="44" y2="85" stroke="#c62828" stroke-width="2"/>
+  <polygon points="38,85 50,80 50,90" fill="#c62828"/>
+  <text x="18" y="73" font-size="12" fill="#c62828" font-weight="600">100 kN</text>
+  <circle cx="100" cy="85" r="3.5" fill="#fff" stroke="#333"/>
+  <text x="84" y="78" font-size="12" font-weight="600">C</text>
+</svg>
+</div>
+<div class="col-right">
+<div class="formula">Σ F<sub>x</sub> = 0:
+   N<sub>CD</sub> + N<sub>CE</sub>·cos 45° − 100 = N<sub>CD</sub> + 0 − 100 = 0
+   ⇒  N<sub>CD</sub> = <b>+100 kN</b>
+
+Σ F<sub>y</sub> = 0 (check):
+   −N<sub>CA</sub> − N<sub>CE</sub>·sin 45° − 100 = −(−100) − 0 − 100 = 0 ✓</div>
+<div class="answer">N<sub>CD</sub> = 100 kN <span class="tension">(tension)</span></div>
+</div>
+</div>
+</div>
+
+<!-- Joint D check -->
+<div class="sub">
+<div class="sub-title">Joint D — final verification (all bars already known)</div>
+<div class="formula">Σ F<sub>x</sub> = 0:   −N<sub>DC</sub> − N<sub>DE</sub>·cos 45° + 100 = −100 − 0 + 100 = 0 ✓
+Σ F<sub>y</sub> = 0:   −N<sub>DB</sub> − N<sub>DE</sub>·sin 45° − 200 = −(−200) − 0 − 200 = 0 ✓</div>
+<div class="note">Every joint closes ⇒ the solution is self-consistent. Using the <i>last</i> joint
+as a check is free insurance — always do it in the exam.</div>
+</div>
+
+<div class="answer" style="font-size:15px;">
+<b>(a) Result:</b> &nbsp; N<sub>CD</sub> = +100 kN <span class="tension">(T)</span> &nbsp;·&nbsp;
+N<sub>CA</sub> = −100 kN <span class="compression">(C)</span> &nbsp;·&nbsp;
+N<sub>DB</sub> = −200 kN <span class="compression">(C)</span> &nbsp;·&nbsp;
+N<sub>AB</sub> = N<sub>AE</sub> = N<sub>ED</sub> = N<sub>CE</sub> = 0
+</div>
+<div class="note"><b>Load-path intuition:</b> the two opposite 100 kN horizontals balance each other
+<em>through the top chord CD</em> (tension); each vertical load drops straight down its own column
+(CA carries 100, DB carries 200). The whole E-web does nothing — 4 of 7 bars are zero-force.</div>
+
+<h3>(b) Ritter's method — bars CD, BD, ED only (forget the results of (a))</h3>
+
+<div class="row">
+<div class="col-left">
+<h4>Cut selection</h4>
+<svg viewBox="0 0 430 330">
+  <!-- bars light -->
+  <g stroke="#999" stroke-width="2" fill="none">
+    <line x1="90" y1="85" x2="270" y2="85"/>
+    <line x1="90" y1="85" x2="90" y2="265"/>
+    <line x1="270" y1="85" x2="270" y2="265"/>
+    <line x1="90" y1="265" x2="270" y2="265"/>
+    <line x1="90" y1="265" x2="270" y2="85"/>
+    <line x1="90" y1="85" x2="180" y2="175"/>
+  </g>
+  <g fill="#fff" stroke="#888">
+    <circle cx="90" cy="85" r="3.5"/><circle cx="270" cy="85" r="3.5"/>
+    <circle cx="90" cy="265" r="3.5"/><circle cx="270" cy="265" r="3.5"/>
+    <circle cx="180" cy="175" r="3.5"/>
+  </g>
+  <text x="74" y="80" font-size="12" font-weight="600">C</text>
+  <text x="280" y="98" font-size="12" font-weight="600">D</text>
+  <text x="72" y="262" font-size="12" font-weight="600">A</text>
+  <text x="282" y="262" font-size="12" font-weight="600">B</text>
+  <text x="160" y="172" font-size="12" font-weight="600">E</text>
+  <!-- Cut I: vertical between E and D -->
+  <line x1="225" y1="45" x2="225" y2="305" stroke="#c62828" stroke-width="2" stroke-dasharray="6,4"/>
+  <text x="232" y="58" font-size="12" fill="#c62828" font-weight="600">Cut Ⅰ</text>
+  <text x="232" y="72" font-size="10" fill="#c62828">cuts CD, ED, AB</text>
+  <!-- Cut II: horizontal between E level and top -->
+  <line x1="50" y1="130" x2="310" y2="130" stroke="#2e7d32" stroke-width="2" stroke-dasharray="6,4"/>
+  <text x="316" y="126" font-size="12" fill="#2e7d32" font-weight="600">Cut Ⅱ</text>
+  <text x="316" y="140" font-size="10" fill="#2e7d32">cuts CA, CE,</text>
+  <text x="316" y="152" font-size="10" fill="#2e7d32">ED, DB</text>
+</svg>
+</div>
+<div class="col-right">
+<h4>Step 0 — inspection before cutting</h4>
+<div class="note">At joint E (unloaded, AE–ED collinear, CE stub):
+<b>N<sub>CE</sub> = 0</b> and <b>N<sub>AE</sub> = N<sub>ED</sub></b> — allowed “for free”, it is not
+the method of joints solution, just the zero-force rule. This is what makes Cut Ⅱ legal
+(4 intersected bars, but ≤ 3 unknowns).</div>
+<h4>Why you can NOT just cut a circle around D</h4>
+<div class="warn">
+A section around node D intersects exactly the 3 wanted bars (CD, DB, ED) — but all three lines
+<b>meet at D</b> (concurrent forces). ΣM<sub>D</sub> becomes 0 = 0, leaving only 2 useful equations
+for 3 unknowns ⇒ unsolvable. <b>A Ritter cut is only useful if the cut bars are not all
+concurrent.</b> That is why we need two “proper” cuts.
+</div>
+</div>
+</div>
+
+<!-- Cut I -->
+<div class="sub">
+<div class="sub-title">Cut Ⅰ — keep the LEFT part {A, C, E} · gives N<sub>CD</sub> and N<sub>ED</sub></div>
+<div class="row">
+<div class="col-left">
+<svg viewBox="0 0 330 330">
+  <pattern id="r1g" patternUnits="userSpaceOnUse" width="6" height="6" patternTransform="rotate(45)">
+    <line x1="0" y1="0" x2="0" y2="6" stroke="#888" stroke-width="1"/>
+  </pattern>
+  <!-- kept bars -->
+  <g stroke="#222" stroke-width="2.5" fill="none">
+    <line x1="90" y1="85" x2="90" y2="265"/>      <!-- CA -->
+    <line x1="90" y1="265" x2="180" y2="175"/>    <!-- AE -->
+    <line x1="90" y1="85" x2="180" y2="175"/>     <!-- CE -->
+    <line x1="90" y1="85" x2="225" y2="85"/>      <!-- CD stub -->
+    <line x1="90" y1="265" x2="225" y2="265"/>    <!-- AB stub -->
+    <line x1="180" y1="175" x2="225" y2="130"/>   <!-- ED stub -->
+  </g>
+  <!-- cut line -->
+  <line x1="225" y1="50" x2="225" y2="300" stroke="#c62828" stroke-width="1.5" stroke-dasharray="6,4"/>
+  <!-- support pin at A -->
+  <polygon points="90,265 80,283 100,283" fill="#fff" stroke="#222" stroke-width="1.5"/>
+  <rect x="74" y="283" width="32" height="6" fill="url(#r1g)" stroke="#666"/>
+  <!-- reaction -->
+  <line x1="62" y1="305" x2="62" y2="252" stroke="#1565c0" stroke-width="2.5"/>
+  <polygon points="62,245 56,257 68,257" fill="#1565c0"/>
+  <text x="30" y="285" font-size="12" fill="#1565c0" font-weight="700">100</text>
+  <!-- loads at C -->
+  <line x1="90" y1="35" x2="90" y2="78" stroke="#c62828" stroke-width="2"/>
+  <polygon points="90,83 85,73 95,73" fill="#c62828"/>
+  <text x="97" y="50" font-size="11" fill="#c62828" font-weight="600">100 kN</text>
+  <line x1="82" y1="85" x2="40" y2="85" stroke="#c62828" stroke-width="2"/>
+  <polygon points="34,85 46,80 46,90" fill="#c62828"/>
+  <text x="10" y="73" font-size="11" fill="#c62828" font-weight="600">100 kN</text>
+  <!-- cut forces -->
+  <line x1="225" y1="85" x2="282" y2="85" stroke="#c62828" stroke-width="2.5"/>
+  <polygon points="289,85 277,80 277,90" fill="#c62828"/>
+  <text x="290" y="76" font-size="13" fill="#c62828" font-weight="700">N<tspan font-size="9" dy="3">CD</tspan></text>
+  <line x1="225" y1="130" x2="266" y2="89" stroke="#c62828" stroke-width="2.5"/>
+  <polygon points="271,84 260,87 268,95" fill="#c62828"/>
+  <text x="276" y="106" font-size="13" fill="#c62828" font-weight="700">N<tspan font-size="9" dy="3">ED</tspan></text>
+  <line x1="225" y1="265" x2="282" y2="265" stroke="#c62828" stroke-width="2.5"/>
+  <polygon points="289,265 277,260 277,270" fill="#c62828"/>
+  <text x="290" y="256" font-size="13" fill="#c62828" font-weight="700">N<tspan font-size="9" dy="3">AB</tspan></text>
+  <!-- nodes -->
+  <g fill="#fff" stroke="#333">
+    <circle cx="90" cy="85" r="3.5"/><circle cx="90" cy="265" r="3.5"/><circle cx="180" cy="175" r="3.5"/>
+  </g>
+  <text x="74" y="80" font-size="12" font-weight="600">C</text>
+  <text x="72" y="262" font-size="12" font-weight="600">A</text>
+  <text x="160" y="172" font-size="12" font-weight="600">E</text>
+  <!-- hint: lines of action through A -->
+  <line x1="90" y1="265" x2="240" y2="115" stroke="#bbb" stroke-width="1" stroke-dasharray="3,4"/>
+  <text x="196" y="225" font-size="10" fill="#888" transform="rotate(-45 196 225)">N_ED line → through A</text>
+</svg>
+</div>
+<div class="col-right">
+<h4>Pick the moment point where 2 of 3 unknowns vanish</h4>
+<p style="font-size:14px; margin:6px 0;">The lines of action of <b>N<sub>ED</sub></b> (along A–E–D)
+and <b>N<sub>AB</sub></b> (along A–B) <b>both pass through A</b> ⇒ take moments about A and only
+N<sub>CD</sub> survives.</p>
+<div class="formula">Σ M<sub>A</sub> = 0 (CCW⁺):
+   100·(5) − N<sub>CD</sub>·(5) = 0        ← only the 100← at C has an arm
+   ⇒  N<sub>CD</sub> = <b>+100 kN</b>
+
+Σ F<sub>y</sub> = 0:
+   100 − 100 + N<sub>ED</sub>·sin 45° = 0
+   ⇒  N<sub>ED</sub> = <b>0</b>
+
+Σ F<sub>x</sub> = 0 (bonus):
+   −100 + N<sub>CD</sub> + N<sub>ED</sub>·cos 45° + N<sub>AB</sub> = 0
+   ⇒  N<sub>AB</sub> = <b>0</b></div>
+<div class="answer">
+N<sub>CD</sub> = 100 kN <span class="tension">(tension)</span> &nbsp;·&nbsp; N<sub>ED</sub> = 0
+</div>
+</div>
+</div>
+</div>
+
+<!-- Cut II -->
+<div class="sub">
+<div class="sub-title">Cut Ⅱ — keep the TOP part {C, D} · gives N<sub>DB</sub></div>
+<div class="row">
+<div class="col-left">
+<svg viewBox="0 0 330 250">
+  <!-- kept bar CD -->
+  <line x1="70" y1="85" x2="250" y2="85" stroke="#222" stroke-width="2.5"/>
+  <!-- stubs down -->
+  <line x1="70" y1="85" x2="70" y2="150" stroke="#222" stroke-width="2.5"/>
+  <line x1="250" y1="85" x2="250" y2="150" stroke="#222" stroke-width="2.5"/>
+  <line x1="70" y1="85" x2="115" y2="130" stroke="#222" stroke-width="2.5"/>
+  <line x1="250" y1="85" x2="205" y2="130" stroke="#222" stroke-width="2.5"/>
+  <!-- cut line -->
+  <line x1="30" y1="150" x2="295" y2="150" stroke="#2e7d32" stroke-width="1.5" stroke-dasharray="6,4"/>
+  <!-- loads -->
+  <line x1="70" y1="35" x2="70" y2="78" stroke="#c62828" stroke-width="2"/>
+  <polygon points="70,83 65,73 75,73" fill="#c62828"/>
+  <text x="77" y="50" font-size="11" fill="#c62828" font-weight="600">100 kN</text>
+  <line x1="62" y1="85" x2="24" y2="85" stroke="#c62828" stroke-width="2"/>
+  <polygon points="18,85 30,80 30,90" fill="#c62828"/>
+  <text x="14" y="72" font-size="11" fill="#c62828" font-weight="600">100 kN</text>
+  <line x1="250" y1="30" x2="250" y2="78" stroke="#c62828" stroke-width="2"/>
+  <polygon points="250,83 245,73 255,73" fill="#c62828"/>
+  <text x="257" y="48" font-size="11" fill="#c62828" font-weight="600">200 kN</text>
+  <line x1="258" y1="85" x2="296" y2="85" stroke="#c62828" stroke-width="2"/>
+  <polygon points="302,85 290,80 290,90" fill="#c62828"/>
+  <text x="268" y="72" font-size="11" fill="#c62828" font-weight="600">100 kN</text>
+  <!-- cut forces (assumed tension = pulling down/away) -->
+  <line x1="70" y1="150" x2="70" y2="195" stroke="#c62828" stroke-width="2.5"/>
+  <polygon points="70,202 64,190 76,190" fill="#c62828"/>
+  <text x="44" y="190" font-size="13" fill="#c62828" font-weight="700">N<tspan font-size="9" dy="3">CA</tspan></text>
+  <line x1="115" y1="130" x2="148" y2="163" stroke="#9e9e9e" stroke-width="2" stroke-dasharray="4,3"/>
+  <text x="150" y="178" font-size="11" fill="#9e9e9e" font-weight="600">N<tspan font-size="8" dy="2">CE</tspan><tspan dy="-2"> = 0 (rule)</tspan></text>
+  <line x1="205" y1="130" x2="172" y2="163" stroke="#9e9e9e" stroke-width="2" stroke-dasharray="4,3"/>
+  <text x="120" y="200" font-size="11" fill="#9e9e9e" font-weight="600">N<tspan font-size="8" dy="2">ED</tspan><tspan dy="-2"> = 0 (Cut Ⅰ)</tspan></text>
+  <line x1="250" y1="150" x2="250" y2="195" stroke="#c62828" stroke-width="2.5"/>
+  <polygon points="250,202 244,190 256,190" fill="#c62828"/>
+  <text x="258" y="190" font-size="13" fill="#c62828" font-weight="700">N<tspan font-size="9" dy="3">DB</tspan></text>
+  <!-- nodes -->
+  <circle cx="70" cy="85" r="3.5" fill="#fff" stroke="#333"/>
+  <circle cx="250" cy="85" r="3.5" fill="#fff" stroke="#333"/>
+  <text x="54" y="80" font-size="12" font-weight="600">C</text>
+  <text x="260" y="100" font-size="12" font-weight="600">D</text>
+</svg>
+</div>
+<div class="col-right">
+<h4>Moments about C kill N<sub>CA</sub> and N<sub>CE</sub></h4>
+<div class="formula">Σ M<sub>C</sub> = 0 (CCW⁺):
+   −200·(5) − N<sub>DB</sub>·(5) = 0
+     ↑ 200 kN at D, arm 5 m   ↑ N<sub>DB</sub> pulls down at x = 5 m
+   (the two 100 kN horizontals pass through height of C ⇒ no arm;
+    N<sub>ED</sub> = 0 already)
+   ⇒  N<sub>DB</sub> = <b>−200 kN</b>
+
+Σ F<sub>y</sub> = 0 (bonus check):
+   −100 − 200 − N<sub>CA</sub> − N<sub>DB</sub> = −300 − N<sub>CA</sub> + 200 = 0
+   ⇒  N<sub>CA</sub> = −100 kN ✓ (matches (a))</div>
+<div class="answer">
+N<sub>DB</sub> = 200 kN <span class="compression">(compression)</span>
+</div>
+</div>
+</div>
+</div>
+
+<div class="answer" style="font-size:15px;">
+<b>(b) Result (identical to (a), as it must be):</b> &nbsp;
+N<sub>CD</sub> = +100 kN <span class="tension">(T)</span> &nbsp;·&nbsp;
+N<sub>BD</sub> = −200 kN <span class="compression">(C)</span> &nbsp;·&nbsp;
+N<sub>ED</sub> = 0
+</div>
+
+<h3>Joints vs Ritter — what you should take away</h3>
+<table class="summary">
+<thead><tr><th></th><th>Method of joints (a)</th><th>Method of Ritter (b)</th></tr></thead>
+<tbody>
+<tr><td><b>Strategy</b></td><td>March node-to-node (B→A→E→C→D), 2 equations each</td><td>One cut straight to the target bars, 3 equations per cut</td></tr>
+<tr><td><b>Best when</b></td><td>you need <em>all</em> bars</td><td>you need <em>a few specific</em> bars</td></tr>
+<tr><td><b>Key skill</b></td><td>choosing the starting joint (≤2 unknowns)</td><td>choosing the cut (≤3 unknowns, not concurrent) and the moment point (where the other unknowns intersect)</td></tr>
+<tr><td><b>Failure mode</b></td><td>starting at a 3-unknown joint</td><td>cutting 3 bars that meet at one node (like around D here)</td></tr>
+</tbody>
+</table>
+
+<div class="warn">
+<b>Common mistakes in truss problems:</b>
+<ol style="margin: 4px 0 0 18px;">
+  <li>Forgetting external loads that sit <b>inside</b> the kept part of a cut (the 10 kN at F in 4.3 Cut 2).</li>
+  <li>Mixing sign conventions mid-problem. Assume tension everywhere; let the algebra decide.</li>
+  <li>“The vertical bar under the load = the load” — false at H in 4.3 (the rafters contribute too; even the official handwritten PDF tripped here).</li>
+  <li>Choosing a Ritter cut whose 3 bars are concurrent — zero information from ΣM.</li>
+  <li>Not exploiting <b>symmetry</b> and <b>zero-force member rules</b> first; they cut the work in half.</li>
+</ol>
+</div>
+</section>
+
+<footer>
+097430 — Statics · Practical Notes 4 · Problems 4.3 &amp; 4.4 · Solutions
+</footer>
+
+</body>
+</html>
